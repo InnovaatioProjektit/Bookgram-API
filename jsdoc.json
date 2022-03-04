@@ -1,0 +1,14 @@
+{
+    "source": {
+        "include": [
+            "controllers/",
+            "models/",
+            "utils/"
+        ],
+        "includePattern": "src/.+\\.js$",
+        "excludePattern": ".+\\Spec\\.js$|lib/.+"
+    },
+    "plugins": [
+        "plugins/markdown"
+    ]
+}
