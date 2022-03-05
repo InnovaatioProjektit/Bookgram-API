@@ -1,0 +1,52 @@
+{
+    "name": "webprojekti",
+    "version": "1.0.0",
+    "main": "app.js",
+    "description": "projekti, TX00CD82-3013",
+    "engines": {
+      "node": "16.14.0",
+      "npm": "6.14.12"
+    },
+    "dependencies": {
+    "dotenv":"^16.0.0",
+      "axios": "0.21.1",
+      "bcrypt": "^5.0.0",
+      "body-parser": "^1.19.0",
+      "cors": "^2.8.5",
+      "express": "^4.17.1",
+      "express-async-handler":"1.2.0",
+      "express-validator": "6.10.1",
+      "jsonwebtoken": "^8.5.1",
+      "minimist": "^1.2.5",
+      "pg": "^8.5.1",
+      "multer":"2.0.0-rc.2"
+    },
+    "devDependencies": {
+      "eslint": "7.25.0",
+      "eventemitter3": "^4.0.7",
+      "exports-loader": "^2.0.0",
+      "jasmine-core": "^3.1.0",
+      "jsdoc": "^3.5.5",
+      "nodemon": "^2.0.6"
+    },
+    "scripts": {
+      "build": "npm install --prefix ./frontend",
+      "clean": "rm -rf ./dist",
+      "start": "node app.js",
+      "web": "npm start",
+      "dev": "cross-env NODE_ENV=production nodemon app.js",
+      "lint": "eslint platform example src --ext .js,.vue cranes.js",
+      "lint:fix": "eslint platform example src --ext .js,.vue cranes.js --fix",
+      "verify": "concurrently 'npm:test' 'npm:lint'",
+      "jsdoc": "jsdoc -c jsdoc.json -R API.md -r -d dist/docs/api",
+      "docs": "npm run jsdoc ; npm run otherdoc"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git@gitlab.metropolia.fi:alexanl/web-sovelluskehitys-2-tx00dz38-3004.git"
+    },
+    "author": "Alexander Liski",
+    "license": "Apache-2.0",
+    "private": false
+  }
+  
