@@ -1,5 +1,6 @@
+import { Router } from 'express'
 import users from './users/index.js'
 
 export default ((app) => {
-    app.use("/users", users)
+    Router.use("/users", users)
 })
