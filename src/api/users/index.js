@@ -11,8 +11,7 @@ const router = Router();
  * @module users
  * @category API
  */
+ router.post("/", login)
+ router.get("/", logout)
 
-export default (async () => {
-    router.post("/", login)
-    router.get("/", logout)
-})
+export default router;
