@@ -20,7 +20,7 @@ const cors = require('cors')
 
 const app = express();
 
-import api from './api'
+import api from './api/index.mjs'
 
 // set defaults based on environment (virtual/local/public)
 options.port = process.env.PORT || options.port || options.p  || 8080;
