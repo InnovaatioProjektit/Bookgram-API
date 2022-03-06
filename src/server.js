@@ -13,11 +13,13 @@ config({
   example: '.env'
 });
 
-const options = require('minimist')(process.argv.slice(2))
+
+import minimist from 'minimist'
 import express, { urlencoded } from "express";
 import bodyParser from 'body-parser';
 import cors from 'cors';
 
+options = minimist(process.argv.slice(2))
 const app = express();
 
 import api from "./api/index.js";
