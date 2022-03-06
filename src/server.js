@@ -50,18 +50,11 @@ app.use("/api", api)
 // for docker
 //app.use(express.static(__dirname + '/dist')) 
 
-
-const server = createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.send('Hello World');
-});
-
-server.listen(options.port, options.host, () => {
+app.listen(options.port, options.host, () => {
   console.log(`Server running at http://${options.host}::${options.port}/`);
 });
 
 process.on("STOP", function(){
   console.log("Exiting server");
-  server.close();
+  app.close();
 })
