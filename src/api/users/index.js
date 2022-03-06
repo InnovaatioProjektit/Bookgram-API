@@ -3,6 +3,8 @@ import { Router } from 'express'
 import login from './login.js'
 import logout from './logout.js'
 
+const router = Router();
+
 /**
  * Kayttajahallinta ja kirjautuminen
  * 
@@ -11,6 +13,6 @@ import logout from './logout.js'
  */
 
 export default (async () => {
-    Router.post("/", login)
-    Router.get("/", logout)
+    router.post("/", login)
+    router.get("/", logout)
 })
