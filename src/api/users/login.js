@@ -6,7 +6,5 @@
  */
 
 export default ( async (request, response ) => {
-    return response.status(200).send({
-        message: "within login"
-    })
+    return response.status(200).send("within login")
 })

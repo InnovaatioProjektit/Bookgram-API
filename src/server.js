@@ -54,7 +54,7 @@ app.use("/api", api)
 const server = createServer((req, res) => {
   res.statusCode = 200;
   res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World');
+  res.send('Hello World');
 });
 
 server.listen(options.port, options.host, () => {
