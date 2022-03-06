@@ -33,7 +33,7 @@
     "scripts": {
       "build": "npm install --prefix ./frontend",
       "clean": "rm -rf ./dist",
-      "start": "node src/server.ts --files",
+      "start": "node src/server.js --files",
       "web": "npm start",
       "dev": "cross-env NODE_ENV=production nodemon app.js",
       "lint": "eslint platform example src --ext .js,.vue cranes.js",
