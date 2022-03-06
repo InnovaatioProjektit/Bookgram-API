@@ -1,4 +1,4 @@
-const users = require('./users/index.mjs')
+const users = require('./users/index.js')
 
 export default (() => {
     app.use("/users", users)

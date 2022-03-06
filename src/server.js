@@ -22,6 +22,8 @@ const app = express();
 
 const api = require('./api')
 
+import api from "./api";
+
 // set defaults based on environment (virtual/local/public)
 options.port = process.env.PORT || options.port || options.p  || 8080;
 options.host = process.env.HOST || options.host || '0.0.0.0';
