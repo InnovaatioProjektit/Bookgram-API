@@ -1,8 +1,7 @@
-const router = require("express").Router();
+import { Router } from 'express'
 
-
-const login = require('./login')
-const logout = require('./logout')
+import login from './login.js'
+import logout from './logout.js'
 
 /**
  * Kayttajahallinta ja kirjautuminen
@@ -12,6 +11,6 @@ const logout = require('./logout')
  */
 
 export default async(() => {
-    router.post("/", login)
-    router.get("/", logout)
+    Router.post("/", login)
+    Router.get("/", logout)
 })
