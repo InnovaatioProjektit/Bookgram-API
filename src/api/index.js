@@ -1,5 +1,5 @@
 import users from './users/index.js'
 
-export default (() => {
+export default ((app) => {
     app.use("/users", users)
 })
