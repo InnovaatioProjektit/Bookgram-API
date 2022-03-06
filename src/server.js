@@ -9,7 +9,9 @@
 
 const http = require('http');
 const dotenv = require('dotenv-safe')
-dotenv.config();
+dotenv.config({
+  example: '../.env'
+});
 
 const options = require('minimist')(process.argv.slice(2))
 const express = require("express")
