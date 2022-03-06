@@ -20,8 +20,6 @@ const cors = require('cors')
 
 const app = express();
 
-const api = require('./api')
-
 import api from "./api";
 
 // set defaults based on environment (virtual/local/public)

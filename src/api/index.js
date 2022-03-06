@@ -1,5 +1,5 @@
 const users = require('./users/index.js')
 
-module.exports = (() => {
+export default (() => {
     app.use("/users", users)
 })
