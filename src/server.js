@@ -7,20 +7,20 @@
  * node app.ja
  */
 
-const http = require('http');
-const dotenv = require('dotenv-safe')
-dotenv.config({
+import { createServer } from 'http';
+import { config } from 'dotenv-safe';
+config({
   example: '.env'
 });
 
 const options = require('minimist')(process.argv.slice(2))
-const express = require("express")
-const bodyParser = require('body-parser')
-const cors = require('cors')
+import express, { urlencoded } from "express";
+import bodyParser from 'body-parser';
+import cors from 'cors';
 
 const app = express();
 
-const api = require("./api")
+import api from "./api";
 
 // set defaults based on environment (virtual/local/public)
 options.port = process.env.PORT || options.port || options.p  || 8080;
@@ -40,7 +40,7 @@ if(options.help || options.h){
 app.use(bodyParser.json())
 app.use(cors())
 app.use(express.json())
-app.use(express.urlencoded({ extended: true}))
+app.use(urlencoded({ extended: true}))
 
 app.use("/api", api)
 
@@ -48,7 +48,7 @@ app.use("/api", api)
 //app.use(express.static(__dirname + '/dist')) 
 
 
-const server = http.createServer((req, res) => {
+const server = createServer((req, res) => {
   res.statusCode = 200;
   res.setHeader('Content-Type', 'text/plain');
   res.end('Hello World');
