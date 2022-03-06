@@ -10,7 +10,7 @@ import logout from './logout.js'
  * @category API
  */
 
-export default async(() => {
+export default (async () => {
     Router.post("/", login)
     Router.get("/", logout)
 })
