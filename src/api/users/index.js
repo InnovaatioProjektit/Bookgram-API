@@ -1,7 +1,8 @@
 const router = require("express").Router();
 
-import login from "./login"
-import logout from "./logout"
+
+const login = require('./login')
+const logout = require('./logout')
 
 /**
  * Kayttajahallinta ja kirjautuminen
