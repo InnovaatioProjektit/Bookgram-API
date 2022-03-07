@@ -22,6 +22,9 @@ import cors from 'cors';
 const options = minimist(process.argv.slice(2))
 const app = express();
 
+global.test = "demo";
+globalThis.test = "demo";
+
 import pool from './utils/db.js'
 global.db = pool;
 

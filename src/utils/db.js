@@ -9,10 +9,10 @@ const { Client, Pool } = pkg;
  * @module db
  * @category Database
  */
-
-console.log(process.env);
-
 const pool = new Pool();
+
+console.log(globalThis.test);
+console.log(global.test)
 
 // the pool will emit an error on behalf of any idle clients
 // it contains if a backend error or network partition happens
