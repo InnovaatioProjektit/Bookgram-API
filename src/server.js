@@ -24,6 +24,8 @@ const app = express();
 
 import api from "./api/index.js";
 
+console.log(process.env.PGPASSWORD);
+
 
 // set defaults based on environment (virtual/local/public)
 options.port = process.env.PORT || options.port || options.p  || 8080;
