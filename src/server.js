@@ -8,10 +8,11 @@
  */
 
 import { createServer } from 'http';
-import { config } from 'dotenv-safe';
+import { config } from 'dotenv';
 config({
   example: '.env'
 });
+global.env = process.env;
 
 
 import minimist from 'minimist'

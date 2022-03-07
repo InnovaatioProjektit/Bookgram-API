@@ -5,11 +5,11 @@ const { Client, Pool } = pkg;
  * Määrittelee ja hallitsee postgreSQL tietokantaa ja sen yhteyttä
  * 
  * @module db
- * @category Controllers
+ * @category Database
  */
 
 
- console.log("password is " + process.env.PGPASSWORD);
+ console.log("password is " + env.PGPASSWORD);
 
 const pool = new Pool();
 
