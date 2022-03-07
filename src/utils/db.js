@@ -8,8 +8,7 @@ const { Client, Pool } = pkg;
  * @category Database
  */
 
-
- console.log("password is " + env.PGPASSWORD);
+console.log(global.env);
 
 const pool = new Pool();
 

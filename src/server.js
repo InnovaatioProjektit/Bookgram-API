@@ -12,7 +12,8 @@ import { config } from 'dotenv';
 config({
   example: '.env'
 });
-global.env = process.env;
+
+global.env = "hello";
 
 
 import minimist from 'minimist'
