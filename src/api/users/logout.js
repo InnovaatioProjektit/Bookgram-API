@@ -1,4 +1,5 @@
-import pool from '@../../utils/db';
+
+import pool from './../../utils/db'
 
 /** 
  * Kirjaa käyttäjä ulko
