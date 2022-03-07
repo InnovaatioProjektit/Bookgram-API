@@ -7,13 +7,11 @@
  * node app.ja
  */
 
-require('dotenv').config();
-
 import { createServer } from 'http';
-import { config } from 'dotenv';
-config({
+import dotenv from 'dotenv'
+dotenv.config({
   example: '.env'
-});
+})
 
 global.hello = "world";
 
