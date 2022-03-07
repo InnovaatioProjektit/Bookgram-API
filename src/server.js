@@ -10,7 +10,7 @@
 import { createServer } from 'http';
 import { config } from 'dotenv-safe';
 config({
-  example: '${__dirname}/.env'
+  example: '.env'
 });
 
 
@@ -23,6 +23,8 @@ const options = minimist(process.argv.slice(2))
 const app = express();
 
 import api from "./api/index.js";
+
+console.log("password " + process.env.PGPASSWORD);
 
 
 // set defaults based on environment (virtual/local/public)
