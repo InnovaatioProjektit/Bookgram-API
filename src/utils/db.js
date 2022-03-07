@@ -1,5 +1,7 @@
+import {} from 'dotenv/config'
 import pkg from 'pg';
 const { Client, Pool } = pkg;
+
 
 /**
  * Määrittelee ja hallitsee postgreSQL tietokantaa ja sen yhteyttä
@@ -8,7 +10,7 @@ const { Client, Pool } = pkg;
  * @category Database
  */
 
-console.log(global.test);
+console.log(process.env);
 
 const pool = new Pool();
 
