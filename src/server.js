@@ -13,7 +13,7 @@ config({
   example: '.env'
 });
 
-global.env = "hello";
+global.hello = "world";
 
 
 import minimist from 'minimist'

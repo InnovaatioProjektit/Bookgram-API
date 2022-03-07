@@ -8,7 +8,7 @@ const { Client, Pool } = pkg;
  * @category Database
  */
 
-console.log(env);
+console.log(global.hello);
 
 const pool = new Pool();
 
