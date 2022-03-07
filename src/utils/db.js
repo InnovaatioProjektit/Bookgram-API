@@ -11,8 +11,7 @@ const { Client, Pool } = pkg;
  */
 const pool = new Pool();
 
-console.log(globalThis.test);
-console.log(global.test)
+console.log("new pool created");
 
 // the pool will emit an error on behalf of any idle clients
 // it contains if a backend error or network partition happens
