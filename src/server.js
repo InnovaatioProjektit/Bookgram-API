@@ -7,6 +7,8 @@
  * node app.ja
  */
 
+require('dotenv').config();
+
 import { createServer } from 'http';
 import { config } from 'dotenv';
 config({
