@@ -1,6 +1,3 @@
-
-import pool from './../../utils/db.js'
-
 /** 
  * Kirjaa käyttäjä ulko
  * 
@@ -8,8 +5,7 @@ import pool from './../../utils/db.js'
  * @route {POST} /api/users
  */
  export default ((request, response) => {
-   
-    pool.query("SELECT * FROM users").then((raw) => {
+    db.query("SELECT * FROM users").then((raw) => {
         if(raw.rowCount){
             return response.status(200).send(rawData[0])
         }

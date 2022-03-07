@@ -22,9 +22,11 @@ import cors from 'cors';
 const options = minimist(process.argv.slice(2))
 const app = express();
 
+import pool from './utils/db.js'
+global.db = pool;
+
 import api from "./api/index.js";
 
-console.log("password " + process.env.PGPASSWORD);
 
 
 // set defaults based on environment (virtual/local/public)
