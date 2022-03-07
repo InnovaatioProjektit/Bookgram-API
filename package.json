@@ -20,7 +20,8 @@
       "minimist": "^1.2.5",
       "multer":"2.0.0-rc.2",
       "dotenv-safe": "^8.2.0",
-      "dotenv":"^16.0.0"
+      "dotenv":"^16.0.0",
+      "pg":"8.7.3"
 
     },
     "devDependencies": {

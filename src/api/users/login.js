@@ -1,10 +1,9 @@
-/**
- * Reitittää kirjautumisen
+/** 
+ * Kirjaa käyttäjä sisälle
  * 
- * @module login
- * @category Routes
+ * @name users post
+ * @route {POST} /api/users
  */
-
-export default ( async (request, response ) => {
+export default ((request, response ) => {
     return response.status(200).send("within login")
 })

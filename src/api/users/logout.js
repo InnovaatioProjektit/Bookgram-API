@@ -1,10 +1,9 @@
-/**
- * Reitittää poiskirjautumisen
+/** 
+ * Kirjaa käyttäjä ulko
  * 
- * @module logout
- * @category Routes
+ * @name users post
+ * @route {POST} /api/users
  */
-
  export default ((request, response) => {
-    return response.status(200).send("within logout")
+    return response.status(200).send("goodbye")
 })
