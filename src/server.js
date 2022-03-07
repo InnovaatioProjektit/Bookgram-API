@@ -7,14 +7,12 @@
  * node app.ja
  */
 
-import { createServer } from 'http';
 import dotenv from 'dotenv'
 dotenv.config({
   example: '.env'
 })
 
-global.hello = "world";
-
+global.test = "hello world";
 
 import minimist from 'minimist'
 import express, { urlencoded } from "express";
