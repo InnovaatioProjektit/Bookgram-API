@@ -8,6 +8,9 @@ const { Client, Pool } = pkg;
  * @category Controllers
  */
 
+
+ console.log("password is " + process.env.PGPASSWORD);
+
 const pool = new Pool();
 
 // the pool will emit an error on behalf of any idle clients
