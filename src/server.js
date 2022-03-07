@@ -18,7 +18,6 @@ import minimist from 'minimist'
 import express, { urlencoded } from "express";
 import bodyParser from 'body-parser';
 import cors from 'cors';
-const { Client } = require('pg')
 
 const options = minimist(process.argv.slice(2))
 const app = express();
