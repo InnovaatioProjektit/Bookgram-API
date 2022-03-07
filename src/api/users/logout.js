@@ -1,5 +1,5 @@
 
-import pool from './../../utils/db'
+import pool from './../../utils/db.js'
 
 /** 
  * Kirjaa käyttäjä ulko
