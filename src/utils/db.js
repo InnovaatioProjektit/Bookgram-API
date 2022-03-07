@@ -1,4 +1,5 @@
-import { Client, Pool } from 'pg';
+import pkg from 'pg';
+const { Client, Pool } = pkg;
 
 /**
  * Määrittelee ja hallitsee postgreSQL tietokantaa ja sen yhteyttä
