@@ -6,8 +6,6 @@ import login from './login.js'
 import logout from './logout.js'
 import register from './register.js'
 
-const router = Router();
-
 /**
  * Kayttajahallinta, kuten kirjautuminen ja rekisterointi
  * 
@@ -15,8 +13,11 @@ const router = Router();
  * @category API
  * @route {POST} /api/users
  */
- router.post("/", 
-    body("email").not().isEmpty().isLength({min: 3}).trim(),
+
+const router = Router();
+
+router.post("/", 
+    body("username").not().isEmpty().isLength({min: 3}).trim(),
     body("password").not().isEmpty().trim(),
 login)
 

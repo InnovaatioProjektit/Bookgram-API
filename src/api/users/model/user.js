@@ -9,7 +9,7 @@ import pool from './../../../utils/db.js'
 
 /**
  * Luo tietokantaan käyttäjä
- * @param {object} userData käyttätiedot (tunnus, sähköposti, puhelin, salasana)
+ * @param {object} userData käyttätiedot (tunnus, salasana)
  */
 export async function create(userData){
 
@@ -32,7 +32,7 @@ export async function create(userData){
  * @param {string} value käyttäjän nimi
  */
   export async function findUserByName(userName){
-    return pool.query("SELECT id, username, email, phone FROM userSchema.User WHERE username = $1", [String(userName)]).then(rawData => {
+    return pool.query("SELECT id, username FROM userSchema.User WHERE username = $1", [String(userName)]).then(rawData => {
         
         if(rawData.rowCount){
             return rawData.rows;
@@ -49,7 +49,7 @@ export async function create(userData){
  * @returns Yksittäisen käyttäjän tiedot (nimi, sähköposti, puhelinnumero, käyttäjäoikeus)
  */
  export async function findUserById(userID){
-    return pool.query("SELECT id, username, email, phone FROM userSchema.User WHERE id = $1", [Number(userID)]).then(rawData => {
+    return pool.query("SELECT id, username FROM userSchema.User WHERE id = $1", [Number(userID)]).then(rawData => {
         
         if(rawData.rowCount){
             return rawData.rows;
@@ -65,15 +65,13 @@ export async function create(userData){
  * @param {number} userid käyttäjätunnus
  */
  export async function remove(userID){
-    return pool.query("DELETE FROM userSchema.Grant WHERE usr = $1",[Number(userID)]).then(raw => {
-        if(raw.rowCount){
-           return pool.query("DELETE FROM userSchema.User WHERE id = $1", [Number(userID)]).then(rawData => {
-                return rawData.rowCount;
-            });
-        }else {
-            return null;
+    return pool.query("DELETE FROM userSchema.User WHERE id = $1", [Number(userID)]).then(rawData => {
+        if(rawData.rowCount){
+            return rawData.rowCount;
+
         }
-    })
+        return null;
+    });
 }
 
 /**
@@ -91,7 +89,5 @@ export async function auth(username){
         }
         return null;
     });
-
-
 }
 
