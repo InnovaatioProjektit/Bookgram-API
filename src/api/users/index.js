@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { body, param, validationResult } from 'express-validator';
+import {findUserByName} from '../users/model/user.js'
 
 import login from './login.js'
 import logout from './logout.js'
@@ -14,16 +15,21 @@ const router = Router();
  * @category API
  * @route {POST} /api/users
  */
- router.post("/", login)
- router.get("/", logout)
- router.post("/register", body('username').not().isEmpty().trim().escape().custom(value => {
+ router.post("/", 
+    body("email").not().isEmpty().isLength({min: 3}).trim(),
+    body("password").not().isEmpty().trim(),
+login)
 
 
- })
- 
- 
- register)
+router.get("/", logout)
 
-
+router.get("/adduser", 
+    body('username').not().isEmpty().trim().escape().custom(async value => {
+        const user = await findUserByName(value);
+        if (user) {
+            return Promise.reject('Käyttäjätunnus on jo olemassa.');
+        }
+    }),
+    body('password').trim().isLength({ min: 8 }), register)
 
 export default router;

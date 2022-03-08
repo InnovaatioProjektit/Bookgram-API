@@ -11,11 +11,11 @@ import pool from './../../../utils/db'
  * Luo tietokantaan käyttäjä
  * @param {object} userData käyttätiedot (tunnus, sähköposti, puhelin, salasana)
  */
-export function create(userData){
+export async function create(userData){
 
-    const {username, email, phone, password} = userData;
+    const {username, password} = userData;
 
-    return pool.query("INSERT INTO userSchema.User (username, email, phone, passwd) VALUES ($1, $2, $3, $4) RETURNING (id)", [username, email, phone, password]).then(rawData => {
+    return pool.query("INSERT INTO userSchema.User (username, passwd) VALUES ($1, $2) RETURNING (id)", [username, password]).then(rawData => {
         if(raw.rowCount){
             return rawData.rows[0];
         }
@@ -31,7 +31,7 @@ export function create(userData){
  * @returns palauttaa yksittäisen käyttäjän tiedot (nimi, sähköposti, puhelin, käyttäjäoikeus)
  * @param {string} value käyttäjän nimi
  */
-  export function findUserByName(userName){
+  export async function findUserByName(userName){
     return pool.query("SELECT id, username, email, phone FROM userSchema.User WHERE username = $1", [String(userName)]).then(rawData => {
         
         if(rawData.rowCount){
@@ -48,7 +48,7 @@ export function create(userData){
  * @param {number} userID käyttäjätunnus
  * @returns Yksittäisen käyttäjän tiedot (nimi, sähköposti, puhelinnumero, käyttäjäoikeus)
  */
- export function findUserById(userID){
+ export async function findUserById(userID){
     return pool.query("SELECT id, username, email, phone FROM userSchema.User WHERE id = $1", [Number(userID)]).then(rawData => {
         
         if(rawData.rowCount){
@@ -64,7 +64,7 @@ export function create(userData){
  * 
  * @param {number} userid käyttäjätunnus
  */
- export function remove(userID){
+ export async function remove(userID){
     return pool.query("DELETE FROM userSchema.Grant WHERE usr = $1",[Number(userID)]).then(raw => {
         if(raw.rowCount){
            return pool.query("DELETE FROM userSchema.User WHERE id = $1", [Number(userID)]).then(rawData => {
@@ -74,5 +74,24 @@ export function create(userData){
             return null;
         }
     })
+}
+
+/**
+ * Hakee käyttäjän kirjautumistiedot (salasana, luvat, jne) tietokannasta esille. Haku
+ * tapahtuu joko 
+ * käyttäjätunnuksella.
+ * 
+ * @param {object} param kirjautumisparametrit (hakutyyppi)
+ * @returns palauttaa olion jossa käyttäjän kirjautumistiedot
+ */
+export async function auth(username){
+    return pool.query("SELECT passwd as password, FROM userSchema.User WHERE UserSchema.User.username = $1", [username]).then( rawData => {
+        if(rawData.rowCount){
+            return rawData.rows[0];
+        }
+        return null;
+    });
+
+
 }
 

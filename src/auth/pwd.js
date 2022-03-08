@@ -16,7 +16,7 @@ export async function accessSession(user){
     const expirationLifeTime = Date.now() + process.env.TOKEN_POLICY
     const userID = user.id
 
-    const session = await global.db.query("INSERT INTO Session () VALUES ()", [])
+    const session = await global.db.query("INSERT INTO Session (id, token, expires) VALUES ($1, $2, $3)", [userID, token, expirationLifeTime])
     return session;
 }
 

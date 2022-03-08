@@ -1,4 +1,8 @@
-import pool from '../../utils/db.js'
+
+import {} from 'dotenv/config'
+import { create } from './model/user.js'
+import {hash} from '../../auth/pwd.js'
+import { validationResult } from 'express-validator';
 
 
 
@@ -10,21 +14,24 @@ import pool from '../../utils/db.js'
  * @name register post 
  * @route {POST} /api/users
  */
-export default ((request, response) => {
-
-
-    const {username, email, phone, password} = userData;
-
-    return pool.query("INSERT INTO userSchema.User (username, email, phone, passwd) VALUES ($1, $2, $3, $4) RETURNING (id)", [username, email, phone, password]).then(rawData => {
-        return pool.query("INSERT INTO userSchema.Grant (usr, addAction, readAction, deleteAction, lvl) VALUES ($1, false, true, false, 1)", [rawData.rows[0].id]).then(raw => {
-            if(raw.rowCount){
-                return rawData.rows[0];
-            }
-
-            return null;
+export default ((request, response, next) => {
+    const err = validationResult(request);
+    if(!err.empty()){
+        return response.status(400).json({
+            method: request.method,
+            status: response.statusCode,
+            errors: err.array()
         });
-});
+    }
+    
+    const hashedPassword = await hash(req.body.password)
 
+    const user = create({
+        username: req.body.username,
+        password: hashedPassword,
+    })
 
-    return response.status(200).send("goodbye")
+    if(user){
+        return response.status(200).send({message: 'User was created successfully', id: user})
+    }
 })
