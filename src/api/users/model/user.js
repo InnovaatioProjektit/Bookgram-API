@@ -1,4 +1,4 @@
-import pool from './../../../utils/db'
+import pool from './../../../utils/db.js'
 
 /**
  * Määrittelee käyttäjän tietokannan skeeman.
