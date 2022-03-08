@@ -27,26 +27,10 @@ export default ((request, response ) => {
         const verified = await validateToken(req.body.password, user.password)
 
         if(verified){
-            
+            return response.status(200).send({ message: 'Login succesful' })
         }
-
-        if (isCorrectPassword) {
-            await res.status(200).send({ message: 'Login succesful' })
-          } else {
-            await res.status(401).send({ message: 'Invalid username or password' })
-          }
     }
 
-    
+    return res.status(401).send({ message: 'Invalid username or password' })
 
-
-
-
-    
-
-    
-
-    
-
-    return response.status(200).send("within login")
 })

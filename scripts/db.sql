@@ -11,19 +11,6 @@ CREATE TABLE IF NOT EXISTS userSchema.User(
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS userSchema.Grant(
-    id SERIAL NOT NULL,
-    usr INT NOT NULL,
-    addAction BOOLEAN,
-    deleteAction BOOLEAN,
-    readAction BOOLEAN,
-    lvl INT,
-    PRIMARY KEY (id),
-    CONSTRAINT FK_User
-        FOREIGN KEY (usr) REFERENCES userSchema.User(id)
-
-);
-
 CREATE TABLE IF NOT EXISTS userSchema.Session(
     id INT NOT NULL,
     token VARCHAR(60) NOT NULL,
