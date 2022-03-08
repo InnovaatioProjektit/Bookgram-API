@@ -2,12 +2,12 @@ import {} from 'dotenv/config'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
-export function hash(password){
+export async function hash(password){
     const salt = await bcrypt.genSalt(parseInt(process.env.SALT))
     return await bcrypt.hash(password, salt)
 }
 
-export function validateToken(hash, hashb){
+export async function validateToken(hash, hashb){
     return await bcrypt.compare(hash, hashb);
 }
 
@@ -31,7 +31,7 @@ export async function getSession(token){
     })
 }
 
-export function validateSession(token){
+export async function validateSession(token){
     try {
         const {id} = jwt.verify(token, process.env.JWT_SECRET)
         const user = await global.db.query("SELECT user FROM User WHERE id = $1", [id]).then(rawData => {
