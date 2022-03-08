@@ -1,4 +1,5 @@
 import { Router } from 'express'
+import { body, param, validationResult } from 'express-validator';
 
 import login from './login.js'
 import logout from './logout.js'
@@ -11,9 +12,18 @@ const router = Router();
  * 
  * @module users
  * @category API
+ * @route {POST} /api/users
  */
  router.post("/", login)
  router.get("/", logout)
- router.post("/", register)
+ router.post("/register", body('username').not().isEmpty().trim().escape().custom(value => {
+
+
+ })
+ 
+ 
+ register)
+
+
 
 export default router;

@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS userSchema.Grant(
 CREATE TABLE IF NOT EXISTS userSchema.Session(
     id INT NOT NULL,
     token VARCHAR(60) NOT NULL,
+    expires BIGINT,
     
     
     PRIMARY KEY (id),
