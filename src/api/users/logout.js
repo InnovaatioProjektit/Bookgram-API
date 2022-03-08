@@ -7,8 +7,8 @@ import pool from '../../utils/db.js'
  * @route {POST} /api/users
  */
  export default ((request, response) => {
-    global.db.query("SELECT * FROM user").then((raw) => {
-        if(raw.rowCount){
+    pool.db.query("SELECT * FROM user").then((rawData) => {
+        if(rawData.rowCount){
             return response.status(200).send(rawData[0])
         }
 
