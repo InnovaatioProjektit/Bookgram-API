@@ -16,7 +16,7 @@ import { validationResult } from 'express-validator';
  */
 export default (async (request, response, next) => {
     const err = validationResult(request);
-    if(!err.empty()){
+    if(!err.isEmpty()){
         return response.status(400).json({
             method: request.method,
             status: response.statusCode,
