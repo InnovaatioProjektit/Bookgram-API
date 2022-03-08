@@ -9,9 +9,9 @@ import pool from '../../utils/db.js'
  export default ((request, response) => {
     pool.query("SELECT * FROM user").then((rawData) => {
         if(rawData.rowCount){
-            return response.status(200).send(rawData[0])
+            return response.status(200).send("data" + rawData[0])
         }
 
-        return response.status(200).send("goodbye")
+        return response.status(400).send("goodbye")
     })    
 })
