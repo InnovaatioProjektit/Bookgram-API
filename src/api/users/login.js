@@ -8,7 +8,7 @@ import { validateToken } from '../../auth/pwd.js'
  * @name users post
  * @route {POST} /api/users
  */
-export default ((request, response ) => {
+export default (async (request, response ) => {
     const err = validationResult(request);
         if(!err.isEmpty()){
             return response.status(400).json({
