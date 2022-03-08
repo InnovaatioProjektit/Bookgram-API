@@ -14,7 +14,7 @@ import { validationResult } from 'express-validator';
  * @name register post 
  * @route {POST} /api/users
  */
-export default ((request, response, next) => {
+export default (async (request, response, next) => {
     const err = validationResult(request);
     if(!err.empty()){
         return response.status(400).json({
