@@ -1,9 +1,16 @@
 import React from 'react'
 
+import Login from './components/login'
+
 
 const App = () => {
     return (
-        <div className='App' />
+        <div className='App'>
+            <Login/>
+        </div>
+
+
+       
     )
 }
 
