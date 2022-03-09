@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken'
+import decodeJWT from 'jwt-decode'
 /**
  * Tallenna käyttäjän autentikointidata selaimelle
  */
@@ -11,7 +11,7 @@ export function storeToken(token){
 }
 
 export function validateToken(token){
-    const header = jwt.decode(token)
+    const header = decodeJWT(token)
     const now = Math.floor(Date.now() / 1000)
     return header && header.exp > now
 }
@@ -27,7 +27,7 @@ export function getValidToken(){
 export function getDecodedToken(){
     const token = getValidToken()
     if(token){
-        return jwt.decode(token)
+        return decodeJWT(token)
     }
 
     return null

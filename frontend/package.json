@@ -19,7 +19,7 @@
     "server.js": "^1.0.0",
     "multer": "1.4.4",
     "bcrypt": "5.0.1",
-    "jsonwebtoken": "8.5.1",
+    "jwt-decode": "3.1.2",
     "normalize.css": "8.0.1"
   },
   "scripts": {
