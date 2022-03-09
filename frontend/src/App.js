@@ -17,10 +17,20 @@ const App = () => {
     const state = {
         decodedToken: getDecodedToken(), // hakee kirjautumisavaimen localStorage API:sta, jos se on tyhjä palauttaa null
     }
+    const loggedIn = !!state.decodedToken
 
     useEffect(() => {
-        navigate('login');
+        navigate('/login');
     })
+
+
+
+    const requireAuth = () => {
+        loggedIn ? render() : <Redirect to="/login" />
+    }
+
+
+    
 
     return (
         <Router>
@@ -30,7 +40,6 @@ const App = () => {
                 <Route path="/login" component={Login}/>
                 <Route path="/register" component={Register}/>
                 <Route component={NotFound}/>
-
               </Routes>
             </Fragment>
 
