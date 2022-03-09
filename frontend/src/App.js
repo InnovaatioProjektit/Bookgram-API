@@ -2,12 +2,12 @@ import React, {useEffect} from 'react'
 import {BrowserRouter as Router, Switch, Route, Redirect, Link, useHistory} from 'react-router-dom'
 
 
-import { getDecodedToken } from './api/auth'
+import { getDecodedToken } from './api/token'
 
 
 import Login from './components/login'
 import Register from './components/register'
-import NotFound from "./components/NotFound";
+import NotFound from "./components/notFound";
 
 
 const App = () => {

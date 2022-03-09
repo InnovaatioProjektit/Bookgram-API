@@ -32,10 +32,3 @@ export function getDecodedToken(){
 
     return null
 }
-
-export function getDecodedToken(){
-    if( isValidToken()){
-        return 0
-    }
-    return null;
-}
