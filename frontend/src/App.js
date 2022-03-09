@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {Fragment, useEffect} from 'react'
 import {BrowserRouter as Router, Switch, Route, Redirect, Link, useHistory} from 'react-router-dom'
 
 
@@ -13,7 +13,7 @@ import NotFound from "./components/notFound";
 const App = () => {
     const history = useHistory();
 
-    state = {
+    const state = {
         decodedToken: getDecodedToken(), // hakee kirjautumisavaimen localStorage API:sta, jos se on tyhjä palauttaa null
     }
 
