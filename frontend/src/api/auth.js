@@ -14,7 +14,7 @@ export async function register({username, password}){
         return getDecodedToken()
     }).catch(res => {
         if(res.response.status == 400 || res.response.status === 401){
-            alert(JSON.parse(res))
+            alert(JSON.parse(res.errors))
         }
     })
 }
