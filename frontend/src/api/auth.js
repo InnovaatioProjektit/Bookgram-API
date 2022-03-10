@@ -14,11 +14,8 @@ export async function register({username, password}){
         return getDecodedToken()
     }).catch(res => {
         if(res.response.status == 400 || res.response.status === 401){
-            console.log(res)
-            console.log(res.data)
-            console.log(res.response.data.msg)
-            console.log(res.method)
-
+            alert(JSON.parse(res.response.data.errors))
+            return res.response.data.errors;
         }
     })
 }
