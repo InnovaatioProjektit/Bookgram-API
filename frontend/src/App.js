@@ -19,15 +19,15 @@ const App = () => {
     const loggedIn = !!state.decodedToken
 
 
-    const requireAuth = () => {
-        if(!loggedIn) <navigate to="login" />
+    const requireAuth = ({component}) => {
+        return loggedIn ? component : <navigate to="login" />
     }
 
 
     return (
         <div className="App">
             <Routes>
-                <Route exact path="/" element={ requireAuth() && <Home /> } />
+                <Route exact path="/" element={ requireAuth(<Home />) } />
                 <Route path="/login" element={<Login />}/>
                 <Route path="register" element={<Register />}/>
                 <Route element={<NotFound />}/>
