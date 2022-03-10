@@ -29,8 +29,8 @@ export default function Register(){
         }
 
         validatePasswords(credentials.password, data.get('rpassword'))
-        setUserErr(!isRequired(credentials.name))
-        setSurErr(!isRequired(credentials.lastname))
+        setUserErr(isRequired(credentials.name))
+        setSurErr(isRequired(credentials.lastname))
 
         if(!pwdMatch || err){
             return
@@ -69,7 +69,7 @@ export default function Register(){
      * @param {string} rpwd 
      */
     const validatePasswords = (lpwd, rpwd) => {
-        setPwdMatch(!isRequired(lpwd) && !isRequired(rpwd) || lpwd == rpwd)
+        setPwdMatch(isRequired(lpwd) && isRequired(rpwd) || lpwd == rpwd)
     }
 
     
