@@ -1,4 +1,5 @@
 import React, {useEffect, useRef, useState, useMemo} from "react";
+import { Link as RouterLink } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -89,9 +90,9 @@ export default function Login(){
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <RouterLink to="/register" variant="body2">
                   {"Don't have an account? Register Now"}
-                </Link>
+                </RouterLink>
               </Grid>
             </Grid>
           </Box>
