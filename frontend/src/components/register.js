@@ -12,9 +12,9 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import  { register } from '../api/auth'
 
 export default function Register(){
-    const {errMessage, setMessage} = useState("")
-    const {err, setErr} = useState(false)
-    const {pwdMatch, setPwdMatch} = useState(false)
+    const [errMessage, setMessage] = useState("")
+    const [err, setErr] = useState(false)
+    const [pwdMatch, setPwdMatch] = useState(false)
     
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -79,7 +79,7 @@ export default function Register(){
         >
           
           <Typography component="h1" variant="h5">
-            Log In
+            Registration
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 3 }}>
               <Grid container spacing={2}>
@@ -107,7 +107,8 @@ export default function Register(){
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
-                        error= {validateEmail()}
+                        error= {validateEmail()   }
+                        helperText={err && "Invalid Email Address. Try Another."}
                         margin="normal"
                         required
                         fullWidth
@@ -125,7 +126,7 @@ export default function Register(){
                             required
                             fullWidth
                             name="lpassword"
-                            label="Retype Password"
+                            label="Type Password"
                             type="password"
                             id="lpassword"
                             autoComplete="new-password"
@@ -136,7 +137,7 @@ export default function Register(){
                             required
                             fullWidth
                             name="rpassword"
-                            label="Type Password"
+                            label="Retype Password"
                             type="password"
                             id="rpassword"
                             autoComplete="new-password"
