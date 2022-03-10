@@ -72,7 +72,7 @@ export default function Login(){
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
-              label="I am here to stay forever"
+              label="Remember, you are here forever"
             />
             <Button
               type="submit"

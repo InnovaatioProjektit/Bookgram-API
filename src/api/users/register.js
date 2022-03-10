@@ -32,6 +32,7 @@ export default (async (request, response, next) => {
     })
 
     if(user){
+        console.log("registered a new user: ", user)
         return response.status(200).send({message: 'User was created successfully', id: user})
     }
 })
