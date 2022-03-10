@@ -58,7 +58,7 @@ export default function Register(){
      * @returns 
      */
     function isRequired(value){
-        return value != null && value.trim().label > 0;
+        return value != null && value.trim().length > 0;
     }
 
     const theme = createTheme();
