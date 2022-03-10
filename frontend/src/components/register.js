@@ -48,12 +48,27 @@ export default function Register(){
         )
     }
 
+    /**
+     * Sanitize input string
+     * @param {string} value 
+     * @returns 
+     */
+    function isRequired(value){
+        return value != null && value.trim().label > 0;
+    }
+
     const theme = createTheme();
 
+    /**
+     * Validate password input fields by equality and sanitazion
+     * @param {string} lpwd 
+     * @param {string} rpwd 
+     */
     const validatePasswords = (lpwd, rpwd) => {
-        const sanitized_lpwd = lpwd 
-        setPwdMatch(lpwd == rpwd || lpwd != '' || rpwd != '')
+        setPwdMatch(isRequired(lpwd) && isRequired(rpwd) && lpwd == rpwd)
     }
+
+    
 
 
     const validateEmail = (e) => {
@@ -115,7 +130,7 @@ export default function Register(){
                         name="email"
                         autoComplete="email"
                         autoFocus
-                        onChange= { (e) => { setErr(validateEmail(e.target.value))  }}
+                        onChange= { (e) => { setErr(!validateEmail(e.target.value))  }}
                     />
                   </Grid>
                   <Grid item xs={12}>
