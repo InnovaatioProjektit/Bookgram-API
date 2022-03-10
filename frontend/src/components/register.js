@@ -42,9 +42,7 @@ export default function Register(){
         console.log(credentials);
 
         const {stat, token} = await register(credentials)
-        if(token){
-            console.log("token:", token, "status", stat)
-        }
+        console.log("token:", token, "status", stat)
     };
 
     function InfoPanel(props){
