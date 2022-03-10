@@ -44,7 +44,7 @@ export default function Register(){
     function InfoPanel(props){
         return (
             <Typography variant="body2" color="text.secondary" align="center" {...props}>
-                {err && errMessage}
+                <h1>{err && errMessage}</h1>
             </Typography>
         )
     }
@@ -53,10 +53,10 @@ export default function Register(){
 
 
     const validateEmail = (e) => {
-        console.log("validate", e)
+        console.log("validate", e, this)
         // regex from http://stackoverflow.com/questions/46155/validate-email-address-in-javascript
         var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return re.test(e);
+        return !re.test(e);
     }
 
 
@@ -107,7 +107,7 @@ export default function Register(){
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
-                        error= {validateEmail()   }
+                        error= { validateEmail() }
                         helperText={err && "Invalid Email Address. Try Another."}
                         margin="normal"
                         required
@@ -122,6 +122,7 @@ export default function Register(){
                   <Grid item xs={12}>
                     <TextField
                             error = { err }
+                            helperText={pwdMatch && "Passwords do not match."}
                             margin="normal"
                             required
                             fullWidth
@@ -133,6 +134,7 @@ export default function Register(){
                         />
                         <TextField
                             error = { err }
+                            helperText={pwdMatch && "Passwords do not match."}
                             margin="normal"
                             required
                             fullWidth
