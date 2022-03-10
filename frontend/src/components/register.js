@@ -23,11 +23,9 @@ export default function Register(){
 
         const credentials = {
             name: data.get('name'),
-            surname: data.get('lastname'),
+            lastname: data.get('lastname'),
             username: data.get('email'),
-            password: data.get('lpassword'),
-            name: data.get('name'),
-            surname: data.get('surname')
+            password: data.get('lpassword')
         }
 
         validatePasswords(credentials.password, data.get('rpassword'))
