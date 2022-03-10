@@ -16,7 +16,7 @@ export async function create(userData){
     const {username, password} = userData;
 
     return pool.query("INSERT INTO userSchema.User (username, passwd) VALUES ($1, $2) RETURNING (id)", [username, password]).then(rawData => {
-        if(raw.rowCount){
+        if(rawData.rowCount){
             return rawData.rows[0];
         }
 
