@@ -2,9 +2,8 @@ import axios from 'axios'
 import {storeToken, getValidToken} from './token'
 
 
-const baseURL = ':3001'
-const api = axios.create({})
-api.defaults.port = 3001
+const baseURL = 'http://10.114.32.29:3001'
+const api = axios.create({ baseURL })
 
 /**
  * Tallenna käyttäjätoken selaimen localStorage muistiin
