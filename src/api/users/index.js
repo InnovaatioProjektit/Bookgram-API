@@ -24,7 +24,7 @@ login)
 
 router.get("/logout", logout)
 
-router.get("/adduser", 
+router.post("/adduser", 
     body('username').not().isEmpty().trim().escape().custom(async value => {
         const user = await findUserByName(value);
         if (user) {
