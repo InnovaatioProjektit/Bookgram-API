@@ -56,7 +56,7 @@ export default function Register(){
     function parseErrors(errors){
         let ret = ''
         errors.forEach(err => {
-            ret += err.param + " : " + err.msg + "\n"
+            ret += err.param + " : " + err.msg + "<br/>"
         })
 
         return ret;
@@ -206,7 +206,7 @@ export default function Register(){
             </Grid>
         </Box>
         </Box>
-        <InfoPanel sx={{ mt: 4}} />
+        <InfoPanel sx={{ mt: 8}} />
         </Container>
         </ThemeProvider>
     );
