@@ -17,9 +17,11 @@ export default function Register(){
     const [UserErr, setUserErr] = useState(true)
     const [SurErr, setSurErr] = useState(true)
     const [pwdMatch, setPwdMatch] = useState(true)
+    const [success, setSuccess] = useState(false)
     
     const handleSubmit = (event) => {
         event.preventDefault();
+        setSuccess(false)
         const data = new FormData(event.currentTarget);
 
         const credentials = {
@@ -41,7 +43,7 @@ export default function Register(){
 
         const token = register(credentials)
         if(token){
-            console.log(token)
+            console.log("token:", token)
         }
     };
 

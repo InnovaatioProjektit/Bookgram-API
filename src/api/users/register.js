@@ -26,7 +26,7 @@ export default (async (request, response, next) => {
     
     const hashedPassword = await hash(request.body.password)
 
-    const user = create({
+    const user = await create({
         username: request.body.username,
         password: hashedPassword,
     })
