@@ -56,7 +56,7 @@ export default function Register(){
     function parseErrors(errors){
         let ret = ''
         errors.forEach(err => {
-            ret += err.param + " : " + err.msg + "<br/>"
+            ret += err.param + " : " + err.msg + <br/>
         })
 
         return ret;
