@@ -69,7 +69,8 @@ export default function Register(){
      * @param {string} rpwd 
      */
     const validatePasswords = (lpwd, rpwd) => {
-        setPwdMatch(isRequired(lpwd) || isRequired(rpwd) || lpwd == rpwd)
+        const valid = isRequired(lpwd) && isRequired(rpwd)
+        setPwdMatch(lpwd == rpwd && valid)
     }
 
     
@@ -169,7 +170,7 @@ export default function Register(){
                   </Grid>
               </Grid>
               <Button
-                disabled = {err && !pwdMatch && !UserErr && !SurErr}
+                disabled = {err || !pwdMatch || !UserErr || !SurErr}
                 type="submit"
                 fullWidth
                 variant="contained"
