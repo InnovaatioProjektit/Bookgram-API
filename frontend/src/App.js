@@ -28,7 +28,7 @@ const App = () => {
     return (
         <div className="App">
             <Routes>
-                <Route exact path="/" component={<Home /> } />
+                <Route exact path="/" component={Home } />
                 <Route path="/login" component={<Login />}/>
                 <Route path="register" component={<Register />}/>
                 
