@@ -13,7 +13,7 @@ import  { register } from '../api/auth'
 
 export default function Register(){
     const [err, setErr] = useState(false)
-    const [pwdMatch, setPwdMatch] = useState(false)
+    const [pwdMatch, setPwdMatch] = useState(true)
     
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -27,7 +27,7 @@ export default function Register(){
             surname: data.get('surname')
         }
 
-        setPwdMatch(credentials.password == data.get('rpassword'))
+        validatePasswords(credentials.password, data.get('rpassword'))
 
         if(!pwdMatch || err){
             return
@@ -40,7 +40,6 @@ export default function Register(){
         }
     };
 
-
     function InfoPanel(props){
         return (
             <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -51,9 +50,13 @@ export default function Register(){
 
     const theme = createTheme();
 
+    const validatePasswords = (lpwd, rpwd) => {
+        const sanitized_lpwd = lpwd 
+        setPwdMatch(lpwd == rpwd || credentials.password != '' || data.get('rpassword') != '')
+    }
+
 
     const validateEmail = (e) => {
-        console.log("validate", e, this)
         // regex from http://stackoverflow.com/questions/46155/validate-email-address-in-javascript
         var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(e);
