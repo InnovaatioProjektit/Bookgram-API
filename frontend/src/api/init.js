@@ -3,7 +3,8 @@ import {storeToken, getValidToken} from './token'
 
 const baseURL = process.env.APP_API_URL 
 console.log(process.env)
-const api = axios.create({ port: 3001 })
+const api = axios.create({ baseURL })
+axios.defaults.port = 3001;
 
 /**
  * Tallenna käyttäjätoken selaimen localStorage muistiin
