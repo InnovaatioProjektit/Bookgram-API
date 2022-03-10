@@ -20,9 +20,9 @@ const App = () => {
 
     
 
-    const requireAuth = () => {
-        if(loggedIn) <navigate to="login" />
-    }
+ //   const requireAuth = () => {
+ //       if(loggedIn) <navigate to="login" />
+ //   }
     
 
     return (
