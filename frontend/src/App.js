@@ -26,7 +26,7 @@ const App = () => {
 
 
     const requireAuth = () => {
-        loggedIn ? render() : <Navigate to="/login" />
+        if(loggedIn) <Navigate to="/login" />
     }
 
 
