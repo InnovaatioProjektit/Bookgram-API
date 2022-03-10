@@ -9,10 +9,10 @@ import { getDecodedToken } from './token'
  */
 export async function register({username, password}){
     return await api.post('/api/users/adduser', {username, password}).then(res => {
-        return [200, res.data]
+        return [true, res.data]
     }).catch(res => {
         if(res.response.status == 400 || res.response.status === 401){
-            return [400, res.response.data.errors];
+            return [false, res.response.data.errors];
         }
     })
 }

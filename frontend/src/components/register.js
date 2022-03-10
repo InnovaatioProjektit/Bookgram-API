@@ -18,6 +18,7 @@ export default function Register(){
     const [SurErr, setSurErr] = useState(true)
     const [pwdMatch, setPwdMatch] = useState(true)
     const [success, setSuccess] = useState(false)
+    const [errMessage, setMessage] = useRef("")
     
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -42,13 +43,28 @@ export default function Register(){
         console.log(credentials);
 
         const [stat, token] = await register(credentials)
-        console.log("token:", token, "status", stat)
+        setSuccess(!stat) 
+        if(stat) parseResponse(token)
+        else parseErrors(token)
     };
+
+    function parseResponse(res) {
+        return res.data.message
+    }
+
+    function parseErrors(errors){
+        let ret = ''
+        errors.foreach(err => {
+            ret += err.msg + "\n"
+        })
+
+        return ret;
+    }
 
     function InfoPanel(props){
         return (
             <Typography variant="body2" color="text.secondary" align="center" {...props}>
-                {err && "Submit failed"}
+                {success && "Submit failed"}
             </Typography>
         )
     }
