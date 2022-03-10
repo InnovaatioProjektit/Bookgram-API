@@ -13,11 +13,11 @@ import NotFound from "./components/notFound";
 const App = () => {
     const navigate = useNavigate();
 
-    this.state = {
+    const state = {
         decodedToken: getDecodedToken(), // hakee kirjautumisavaimen localStorage API:sta, jos se on tyhjä palauttaa null
     }
 
-    const loggedIn = !!this.state.decodedToken
+    const loggedIn = !!state.decodedToken
 
 
     const RequireAuth = ({component}) => {
