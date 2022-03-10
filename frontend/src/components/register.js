@@ -45,7 +45,7 @@ export default function Register(){
         const [stat, token] = await register(credentials)
         console.log(token)
         setSuccess(!stat) 
-        setMessage( !stat ? parseResponse(token) : parseErrors(token))
+        setMessage( stat ? parseResponse(token) : parseErrors(token))
         
     };
 
@@ -55,8 +55,8 @@ export default function Register(){
 
     function parseErrors(errors){
         let ret = ''
-        errors.foreach(err => {
-            ret += err.msg + "\n"
+        errors.forEach(err => {
+            ret += err.param + " : " + err.msg + "\n"
         })
 
         return ret;
