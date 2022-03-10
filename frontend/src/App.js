@@ -35,9 +35,10 @@ const App = () => {
         <div id="app" className="App">
           <Fragment>
               <Routes>
-                <Route path="login" component={<Login />}/>
-                <Route path="register" component={<Register />}/>
-                <Route component={NotFound}/>
+                <Route exact path="/" element={<Login /> } />
+                <Route path="login" element={<Login />}/>
+                <Route path="register" element={<Register />}/>
+                <Route element={NotFound}/>
               </Routes>
             </Fragment>
 
