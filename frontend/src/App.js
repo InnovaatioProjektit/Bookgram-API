@@ -13,7 +13,7 @@ import NotFound from "./components/notFound";
 const App = () => {
     const navigate = useNavigate();
 
-    const state = {
+    this.state = {
         decodedToken: getDecodedToken(), // hakee kirjautumisavaimen localStorage API:sta, jos se on tyhjä palauttaa null
     }
 
@@ -21,7 +21,7 @@ const App = () => {
 
 
     const RequireAuth = ({component}) => {
-        return loggedIn ? component : <Navigate to="login" />
+        return loggedIn ? component : <Navigate to="register" />
     }
 
 

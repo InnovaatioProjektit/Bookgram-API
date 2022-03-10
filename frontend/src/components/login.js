@@ -22,8 +22,8 @@ export default function Login(){
         const data = new FormData(event.currentTarget);
 
         const credentials = {
-            username: data.get('username'),
-            password: data.get('password')
+            username: data.get('email'),
+            pwd: data.get('password')
         }
 
         console.log(credentials);
@@ -45,11 +45,9 @@ export default function Login(){
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
+          
           <Typography component="h1" variant="h5">
-            Sign in
+            Log In
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
@@ -74,7 +72,7 @@ export default function Login(){
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
+              label="I am here to stay forever"
             />
             <Button
               type="submit"
@@ -92,7 +90,7 @@ export default function Login(){
               </Grid>
               <Grid item>
                 <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                  {"Don't have an account? Register Now"}
                 </Link>
               </Grid>
             </Grid>
