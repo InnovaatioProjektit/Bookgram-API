@@ -16,13 +16,13 @@ import register from './register.js'
 
 const router = Router();
 
-router.post("/", 
+router.post("/login", 
     body("username").not().isEmpty().isLength({min: 3}).trim(),
     body("password").not().isEmpty().trim(),
 login)
 
 
-router.get("/", logout)
+router.get("/logout", logout)
 
 router.get("/adduser", 
     body('username').not().isEmpty().trim().escape().custom(async value => {

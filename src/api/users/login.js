@@ -6,7 +6,7 @@ import { validateToken } from '../../auth/pwd.js'
  * Kirjaa käyttäjä sisälle
  * 
  * @name users post
- * @route {POST} /api/users
+ * @route {POST} /api/users/login
  */
 export default (async (request, response ) => {
     const err = validationResult(request);

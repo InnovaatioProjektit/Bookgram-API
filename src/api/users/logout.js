@@ -1,10 +1,10 @@
 import pool from '../../utils/db.js'
 
 /** 
- * Kirjaa käyttäjä ulko
+ * Kirjaa käyttäjä ulos palvelusta
  * 
  * @name users post
- * @route {POST} /api/users
+ * @route {POST} /api/users/logout
  */
  export default ((request, response) => {
     global.db.query("SELECT * FROM user").then((rawData) => {
