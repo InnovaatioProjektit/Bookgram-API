@@ -5,7 +5,7 @@ import {BrowserRouter as Router, Routes, Route, Redirect, Link, useNavigate } fr
 
 import { getDecodedToken } from './api/token'
 
-
+import Header from './components/header'
 import Login from './components/login'
 import Register from './components/register'
 import NotFound from "./components/notFound";
@@ -20,7 +20,7 @@ const App = () => {
     const loggedIn = !!state.decodedToken
 
     useEffect(() => {
-        navigate('login');
+        //navigate('login');
     })
 
     const requireAuth = () => {
@@ -30,26 +30,13 @@ const App = () => {
 
     return (
         <Router>
-        <div id="app" className="App">
-            <div>
-                <Link to="login">login</Link>
-            </div>
-            <i>Hello World</i>
-          <Fragment>
-          <i>Hello Fragment</i>
-              <Routes>
-                <Route exact path="/" component={<Login /> } />
+             <Routes>
+                <Route exact path="/" component={<Header /> } />
                 <Route path="login" component={<Login />}/>
                 <Route path="register" component={<Register />}/>
                 <Route element={NotFound}/>
               </Routes>
-            </Fragment>
-
-        </div>
         </Router>
-
-
-       
     )
 }
 

@@ -1,7 +1,6 @@
 import React, {useEffect, useRef, useState, useMemo} from "react";
 
 export default function Header(){
-
     return (
         <div className="app-header">
         <header className="App-header">
