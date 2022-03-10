@@ -12,7 +12,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import  { register } from '../api/auth'
 
-export default function Register(){
+export default async function Register(){
     const [err, setErr] = useState(false)
     const [UserErr, setUserErr] = useState(true)
     const [SurErr, setSurErr] = useState(true)
@@ -41,7 +41,7 @@ export default function Register(){
 
         console.log(credentials);
 
-        const token = register(credentials)
+        const token = await register(credentials)
         if(token){
             console.log("token:", token)
         }
