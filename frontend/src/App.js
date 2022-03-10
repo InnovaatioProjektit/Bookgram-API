@@ -19,9 +19,7 @@ const App = () => {
     }
     const loggedIn = !!state.decodedToken
 
-    useEffect(() => {
-        //navigate('login');
-    })
+    
 
     const requireAuth = () => {
         if(loggedIn) <navigate to="login" />
