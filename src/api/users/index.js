@@ -31,6 +31,6 @@ router.post("/adduser",
             return Promise.reject('Käyttäjätunnus on jo olemassa.');
         }
     }),
-    body('password').trim().isLength({ min: 8 }), register)
+    body('password').trim().isLength({ min: 4 }), register)
 
 export default router;

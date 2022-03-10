@@ -12,7 +12,7 @@ import { validationResult } from 'express-validator';
  *  tietokantaan.
  * 
  * @name register post 
- * @route {POST} /api/users
+ * @route {POST} /api/users/adduser
  */
 export default (async (request, response, next) => {
     const err = validationResult(request);
@@ -24,10 +24,10 @@ export default (async (request, response, next) => {
         });
     }
     
-    const hashedPassword = await hash(req.body.password)
+    const hashedPassword = await hash(request.body.password)
 
     const user = create({
-        username: req.body.username,
+        username: request.body.username,
         password: hashedPassword,
     })
 
