@@ -15,8 +15,6 @@ export async function register({username, password}){
     }).catch(res => {
         if(res.response.status == 400 || res.response.status === 401){
             console.log(res)
-            alert(JSON.parse(res.response.data))
-            console.log(res)
         }
     })
 }
