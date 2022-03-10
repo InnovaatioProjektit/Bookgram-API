@@ -2,7 +2,7 @@ import axios from 'axios'
 import {storeToken, getValidToken} from './token'
 
 
-const baseURL = '/:3001'
+const baseURL = ':3001'
 const api = axios.create({ baseURL })
 
 /**
