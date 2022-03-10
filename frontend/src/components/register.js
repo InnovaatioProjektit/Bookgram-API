@@ -12,7 +12,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import  { register } from '../api/auth'
 
 export default function Register(){
-    const [errMessage, setMessage] = useState("")
     const [err, setErr] = useState(false)
     const [pwdMatch, setPwdMatch] = useState(false)
     
@@ -28,23 +27,24 @@ export default function Register(){
             surname: data.get('surname')
         }
 
-        setPwdMatch(credentials.password != data.get('rpassword'))
+        setPwdMatch(credentials.password == data.get('rpassword'))
 
-        if(pwdMatch){
-            setErr(true)
-            setMessage("Passwords don't match!")
+        if(!pwdMatch || err){
             return
         }
 
         console.log(credentials);
-        register(credentials)
+        const token = register(credentials)
+        if(token){
+            console.log(token)
+        }
     };
 
 
     function InfoPanel(props){
         return (
             <Typography variant="body2" color="text.secondary" align="center" {...props}>
-                <h1>{err && errMessage}</h1>
+                {err && "Submit failed"}
             </Typography>
         )
     }
@@ -56,12 +56,7 @@ export default function Register(){
         console.log("validate", e, this)
         // regex from http://stackoverflow.com/questions/46155/validate-email-address-in-javascript
         var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return !re.test(e);
-    }
-
-
-    const passwordsMatch = (val, e) => {
-        return val == e;
+        return re.test(e);
     }
 
 
@@ -107,7 +102,7 @@ export default function Register(){
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
-                        error= { validateEmail() }
+                        error= { err }
                         helperText={err && "Invalid Email Address. Try Another."}
                         margin="normal"
                         required
@@ -117,12 +112,13 @@ export default function Register(){
                         name="email"
                         autoComplete="email"
                         autoFocus
+                        onChange= { (e) => { setErr(validateEmail(e.target.value))  }}
                     />
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
-                            error = { err }
-                            helperText={pwdMatch && "Passwords do not match."}
+                            error = { !pwdMatch }
+                            helperText={!pwdMatch && "Passwords do not match."}
                             margin="normal"
                             required
                             fullWidth
@@ -133,8 +129,8 @@ export default function Register(){
                             autoComplete="new-password"
                         />
                         <TextField
-                            error = { err }
-                            helperText={pwdMatch && "Passwords do not match."}
+                            error = { !pwdMatch }
+                            helperText={!pwdMatch && "Passwords do not match."}
                             margin="normal"
                             required
                             fullWidth
@@ -163,7 +159,7 @@ export default function Register(){
             </Grid>
         </Box>
         </Box>
-        <InfoPanel sx={{ mt: 12}} />
+        <InfoPanel sx={{ mt: 4}} />
         </Container>
         </ThemeProvider>
     );
