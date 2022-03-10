@@ -13,14 +13,17 @@ import  { register } from '../api/auth'
 
 export default function Register(){
     const [err, setErr] = useState(false)
+    const [UserErr, setUserErr] = useState(false)
+    const [SurErr, setSurErr] = useState(false)
     const [pwdMatch, setPwdMatch] = useState(true)
     
     const handleSubmit = (event) => {
         event.preventDefault();
-        setErr(false)
         const data = new FormData(event.currentTarget);
 
         const credentials = {
+            name: data.get('name'),
+            surname: data.get('lastname'),
             username: data.get('email'),
             password: data.get('lpassword'),
             name: data.get('name'),
@@ -28,6 +31,8 @@ export default function Register(){
         }
 
         validatePasswords(credentials.password, data.get('rpassword'))
+        setUserErr(isRequired(credentials.name))
+        setSurErr(isRequired(credentials.lastname))
 
         if(!pwdMatch || err){
             return
@@ -98,6 +103,8 @@ export default function Register(){
               <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
                     <TextField
+                            error = {!UserErr}
+                            helperText={!UserErr && "Text field must not be empty"} 
                             required
                             fullWidth
                             id="name"
@@ -109,6 +116,8 @@ export default function Register(){
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <TextField
+                            error = {!SurErr}
+                            helperText={!SurErr && "Text field must not be empty"} 
                             required
                             fullWidth
                             id="lastname"
