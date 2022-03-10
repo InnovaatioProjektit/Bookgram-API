@@ -3,7 +3,8 @@ import {storeToken, getValidToken} from './token'
 
 
 const baseURL = ':3001'
-const api = axios.create({ baseURL })
+const api = axios.create({})
+api.defaults.port = 3001
 
 /**
  * Tallenna käyttäjätoken selaimen localStorage muistiin
