@@ -107,7 +107,7 @@ export default function Register(){
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
-                        error= {validateEmail(e)}
+                        error= {validateEmail()}
                         margin="normal"
                         required
                         fullWidth
