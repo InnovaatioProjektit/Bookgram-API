@@ -26,7 +26,7 @@ const App = () => {
 
 
     const requireAuth = () => {
-        if(loggedIn) <Navigate to="/login" />
+        if(loggedIn) <navigate to="/login" />
     }
 
 
