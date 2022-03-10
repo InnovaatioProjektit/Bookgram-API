@@ -7,8 +7,8 @@ import { getDecodedToken } from './token'
  * @param {string} pwd 
  * @returns palauttaa JWT sessioavaimen.
  */
-export function register({username, pwd}){
-    return api.post('/api/users/adduser', {username, pwd}).then(res => {
+export function register({username, password}){
+    return api.post('/api/users/adduser', {username, password}).then(res => {
         const token = res.data.token
         setToken(token)
         return getDecodedToken()
@@ -20,8 +20,8 @@ export function register({username, pwd}){
  * @param {object} param0  käyttäjätiedot
  * @returns palauttaa kirjautumisavaimen
  */
-export function login({username, pwd}){
-    return api.post('api/users/login', {username, pwd}).then(res => {
+export function login({username, password}){
+    return api.post('api/users/login', {username, password}).then(res => {
         const token = res.data.token 
         setToken(token)
         return getDecodedToken()
