@@ -1,5 +1,5 @@
 import React, {Fragment, useEffect} from 'react'
-import {BrowserRouter as Router, Routes, Route, Redirect, Link, useNavigate } from 'react-router-dom'
+import {Routes, Route, Redirect, Link, useNavigate } from 'react-router-dom'
 
 
 
@@ -27,14 +27,12 @@ const App = () => {
     
 
     return (
-        <Router>
-             <Routes>
-                <Route exact path="/" component={<Header /> } />
-                <Route path="login" component={<Login />}/>
-                <Route path="register" component={<Register />}/>
-                <Route element={NotFound}/>
-              </Routes>
-        </Router>
+        <Routes>
+            <Route exact path="/" component={<Header /> } />
+            <Route path="login" component={<Login />}/>
+            <Route path="register" component={<Register />}/>
+            <Route element={NotFound}/>
+        </Routes>
     )
 }
 
