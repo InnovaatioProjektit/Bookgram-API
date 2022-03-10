@@ -13,8 +13,8 @@ import  { register } from '../api/auth'
 
 export default function Register(){
     const [err, setErr] = useState(false)
-    const [UserErr, setUserErr] = useState(false)
-    const [SurErr, setSurErr] = useState(false)
+    const [UserErr, setUserErr] = useState(true)
+    const [SurErr, setSurErr] = useState(true)
     const [pwdMatch, setPwdMatch] = useState(true)
     
     const handleSubmit = (event) => {
@@ -70,7 +70,7 @@ export default function Register(){
      * @param {string} rpwd 
      */
     const validatePasswords = (lpwd, rpwd) => {
-        setPwdMatch(isRequired(lpwd) && isRequired(rpwd) && lpwd == rpwd)
+        setPwdMatch(!isRequired(lpwd) && !isRequired(rpwd) && lpwd == rpwd)
     }
 
     
