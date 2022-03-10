@@ -19,15 +19,14 @@ const App = () => {
     const loggedIn = !!state.decodedToken
 
     useEffect(() => {
-        navigate('login');
+        navigate('/');
     })
 
 
     const requireAuth = () => {
         if(loggedIn) <navigate to="login" />
-
     }
-    
+
 
     return (
         <div className="App">
