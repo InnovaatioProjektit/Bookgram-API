@@ -17,7 +17,7 @@ export default function Register(){
     const [SurErr, setSurErr] = useState(true)
     const [pwdMatch, setPwdMatch] = useState(true)
     
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
 
