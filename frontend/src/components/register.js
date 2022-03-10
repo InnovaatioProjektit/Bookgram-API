@@ -31,15 +31,16 @@ export default function Register(){
         }
 
         validatePasswords(credentials.password, data.get('rpassword'))
-        setUserErr(isRequired(credentials.name))
-        setSurErr(isRequired(credentials.lastname))
+        setUserErr(!isRequired(credentials.name))
+        setSurErr(!isRequired(credentials.lastname))
 
         if(!pwdMatch || err){
             return
         }
 
         console.log(credentials);
-        const token = register(credentials)
+
+        const token = await register(credentials)
         if(token){
             console.log(token)
         }
@@ -70,7 +71,7 @@ export default function Register(){
      * @param {string} rpwd 
      */
     const validatePasswords = (lpwd, rpwd) => {
-        setPwdMatch(!isRequired(lpwd) && !isRequired(rpwd) && lpwd == rpwd)
+        setPwdMatch(!isRequired(lpwd) && !isRequired(rpwd) || lpwd == rpwd)
     }
 
     
@@ -170,6 +171,7 @@ export default function Register(){
                   </Grid>
               </Grid>
               <Button
+                disabled = {err && !pwdMatch && !UserErr && !SurErr}
                 type="submit"
                 fullWidth
                 variant="contained"
