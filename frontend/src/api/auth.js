@@ -8,10 +8,14 @@ import { getDecodedToken } from './token'
  * @returns palauttaa JWT sessioavaimen.
  */
 export function register({username, password}){
-    return api.post('/api/users/adduser', {username, password}).then(res => {
+    return await api.post('/api/users/adduser', {username, password}).then(res => {
         const token = res.data.token
         setToken(token)
         return getDecodedToken()
+    }).catch(res => {
+        if(res.response.status == 400 || res.response.status === 401){
+            alert(res.data.message)
+        }
     })
 }
 
