@@ -180,11 +180,10 @@ export default function Register(){
             </Button>
             <Grid container justifyContent="flex-end">
                 <Grid item>
-                <RouterLink to="login">
-                    <Link href="#" variant="body2">
+                    
+                    <Link href="#" RouterLink to="/login" variant="body2">
                         Already have an account? Log in here
                     </Link>
-                </RouterLink>
                     
                 </Grid>
             </Grid>
