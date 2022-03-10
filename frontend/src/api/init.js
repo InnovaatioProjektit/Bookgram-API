@@ -2,6 +2,7 @@ import axios from 'axios'
 import {storeToken, getValidToken} from './token'
 
 const baseURL = process.env.APP_API_URL 
+console.log(process.env)
 const api = axios.create({ baseURL })
 
 /**

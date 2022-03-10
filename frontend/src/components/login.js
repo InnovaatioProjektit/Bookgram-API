@@ -13,16 +13,22 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+import  { login } from '../api/auth'
+
 export default function Login(){
     
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
 
-        console.log({
+        const credentials = {
             username: data.get('username'),
             password: data.get('password')
-        });
+        }
+
+        console.log(credentials);
+
+        login(credentials)
     };
 
     const theme = createTheme();
