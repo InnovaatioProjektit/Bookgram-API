@@ -11,9 +11,12 @@ export function storeToken(token){
 }
 
 export function validateToken(token){
-    const header = decodeJWT(token)
-    const now = Math.floor(Date.now() / 1000)
-    return header && header.exp > now
+    if(token){
+        const header = decodeJWT(token)
+        const now = Math.floor(Date.now() / 1000)
+        return header && header.exp > now
+    }
+    return false
 }
 
 export function getValidToken(){
