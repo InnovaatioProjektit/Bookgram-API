@@ -69,7 +69,7 @@ export default function Register(){
      * @param {string} rpwd 
      */
     const validatePasswords = (lpwd, rpwd) => {
-        setPwdMatch(isRequired(lpwd) && isRequired(rpwd) && lpwd == rpwd)
+        setPwdMatch(isRequired(lpwd) || isRequired(rpwd) || lpwd == rpwd)
     }
 
     
