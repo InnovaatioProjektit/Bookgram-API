@@ -12,14 +12,14 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import  { register } from '../api/auth'
 
-export default async function Register(){
+export default function Register(){
     const [err, setErr] = useState(false)
     const [UserErr, setUserErr] = useState(true)
     const [SurErr, setSurErr] = useState(true)
     const [pwdMatch, setPwdMatch] = useState(true)
     const [success, setSuccess] = useState(false)
     
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         setSuccess(false)
         const data = new FormData(event.currentTarget);
