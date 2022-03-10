@@ -41,7 +41,7 @@ export default function Register(){
 
         console.log(credentials);
 
-        const token = await register(credentials)
+        [status, token] = await register(credentials)
         if(token){
             console.log("token:", token)
         }
