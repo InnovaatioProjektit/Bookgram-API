@@ -15,6 +15,10 @@ export async function register({username, password}){
     }).catch(res => {
         if(res.response.status == 400 || res.response.status === 401){
             console.log(res)
+            console.log(res.data)
+            console.log(res.response)
+            console.log(res.method)
+
         }
     })
 }
