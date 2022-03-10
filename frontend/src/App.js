@@ -23,8 +23,6 @@ const App = () => {
         navigate('login');
     })
 
-
-
     const requireAuth = () => {
         if(loggedIn) <navigate to="login" />
     }
@@ -33,11 +31,16 @@ const App = () => {
     return (
         <Router>
         <div id="app" className="App">
+            <div>
+                <Link to="login">login</Link>
+            </div>
+            <i>Hello World</i>
           <Fragment>
+          <i>Hello Fragment</i>
               <Routes>
-                <Route exact path="/" element={<Login /> } />
-                <Route path="login" element={<Login />}/>
-                <Route path="register" element={<Register />}/>
+                <Route exact path="/" component={<Login /> } />
+                <Route path="login" component={<Login />}/>
+                <Route path="register" component={<Register />}/>
                 <Route element={NotFound}/>
               </Routes>
             </Fragment>
