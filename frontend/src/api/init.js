@@ -1,8 +1,10 @@
 import axios from 'axios'
 import {storeToken, getValidToken} from './token'
 
-const baseURL = process.env.APP_API_URL 
+
+const baseURL = '/'
 console.log(process.env.APP_API_URL)
+
 const api = axios.create({ baseURL })
 api.defaults.port = 3001;
 
