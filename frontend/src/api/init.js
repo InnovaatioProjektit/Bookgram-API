@@ -2,7 +2,7 @@ import axios from 'axios'
 import {storeToken, getValidToken} from './token'
 
 
-const baseURL = '/'
+const baseURL = 'http://localhost:3001'
 console.log(process.env.APP_API_URL)
 
 const api = axios.create({ baseURL })
