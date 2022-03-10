@@ -52,7 +52,7 @@ export default function Register(){
 
     const validatePasswords = (lpwd, rpwd) => {
         const sanitized_lpwd = lpwd 
-        setPwdMatch(lpwd == rpwd || credentials.password != '' || data.get('rpassword') != '')
+        setPwdMatch(lpwd == rpwd || lwpwd != '' || rpwd != '')
     }
 
 
