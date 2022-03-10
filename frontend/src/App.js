@@ -11,18 +11,22 @@ import NotFound from "./components/notFound";
 
 
 const App = () => {
-  //  const navigate = useNavigate();
+    const navigate = useNavigate();
+    const state = {
+        decodedToken: getDecodedToken(), // hakee kirjautumisavaimen localStorage API:sta, jos se on tyhjä palauttaa null
+    }
 
-// const state = {
- //       decodedToken: getDecodedToken(), // hakee kirjautumisavaimen localStorage API:sta, jos se on tyhjä palauttaa null
- //   }
- //   const loggedIn = !!state.decodedToken
+    const loggedIn = !!state.decodedToken
 
-    
+    useEffect(() => {
+        navigate('login');
+    })
 
- //   const requireAuth = () => {
- //       if(loggedIn) <navigate to="login" />
- //   }
+
+    const requireAuth = () => {
+        if(loggedIn) <navigate to="login" />
+
+    }
     
 
     return (
@@ -31,7 +35,7 @@ const App = () => {
                 <Route exact path="/" element={<Home /> } />
                 <Route path="/login" element={<Login />}/>
                 <Route path="register" element={<Register />}/>
-                
+                <Route element={<NotFound />}/>
             </Routes>
         </div>
     )
