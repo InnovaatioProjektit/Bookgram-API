@@ -18,20 +18,16 @@ const App = () => {
 
     const loggedIn = !!state.decodedToken
 
-    useEffect(() => {
-        navigate('/');
-    })
-
 
     const requireAuth = () => {
-        if(loggedIn) <navigate to="login" />
+        if(!loggedIn) <navigate to="login" />
     }
 
 
     return (
         <div className="App">
             <Routes>
-                <Route exact path="/" element={<Home /> } />
+                <Route exact path="/" element={ requireAuth() && <Home /> } />
                 <Route path="/login" element={<Login />}/>
                 <Route path="register" element={<Register />}/>
                 <Route element={<NotFound />}/>
