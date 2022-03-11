@@ -83,7 +83,7 @@ export async function create(userData){
  * @returns palauttaa olion jossa käyttäjän kirjautumistiedot
  */
 export async function auth(username){
-    return pool.query("SELECT passwd as password, username FROM userSchema.User WHERE UserSchema.User.username = $1", [username]).then( rawData => {
+    return pool.query("SELECT id, passwd as password, username FROM userSchema.User WHERE UserSchema.User.username = $1", [username]).then( rawData => {
         if(rawData.rowCount){
             return rawData.rows[0];
         }

@@ -1,7 +1,7 @@
 
 import { validationResult } from 'express-validator';
 import { auth } from './model/user.js'
-import { validateToken } from '../../auth/pwd.js'
+import { validateToken, accessSession } from '../../auth/pwd.js'
 /** 
  * Kirjaa käyttäjä sisälle
  * 
@@ -28,7 +28,7 @@ export default (async (request, response ) => {
         const verified = await validateToken(request.body.password, user.password)
 
         if(verified){
-            return response.status(200).send({ message: 'Login succesful' })
+            return response.status(200).send({ token: accessSession(user), message: 'Login succesful' })
         }
     }
 
