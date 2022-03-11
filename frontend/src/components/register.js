@@ -43,7 +43,7 @@ export default function Register(){
         console.log(credentials);
 
         const [stat, token] = await register(credentials)
-        setSuccess(!stat) 
+        setSuccess(true) 
         setMessage( stat ? parseResponse(token) : parseErrors(token))
         
     };
@@ -63,7 +63,7 @@ export default function Register(){
 
     function InfoPanel(props){
         return (
-            <Typography variant="body3" color="text.secondary" align="center" {...props}>
+            <Typography variant="body2" color="text.secondary" align="center" {...props}>
                 {success && errMessage}
             </Typography>
         )
