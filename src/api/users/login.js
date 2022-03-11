@@ -29,6 +29,8 @@ export default (async (request, response ) => {
         if(verified){
             return response.status(200).send({ message: 'Login succesful' })
         }
+
+        console.log("A user logged in: ", user)
     }
 
     return res.status(401).send({ message: 'Invalid username or password' })
