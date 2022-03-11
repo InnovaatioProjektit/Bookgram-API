@@ -38,6 +38,7 @@ export default function Login(){
         setMessage(stat ? "token" : token)
 
         if(stat){
+          console.log(token)
           navigate("/");
         }
     };
