@@ -32,6 +32,6 @@ export default (async (request, response ) => {
         }
     }
 
-    return res.status(401).send({ message: 'Invalid username or password' })
+    return response.status(401).send({ message: 'Invalid username or password' })
 
 })
