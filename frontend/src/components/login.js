@@ -26,7 +26,7 @@ export default function Login(){
 
         const credentials = {
             username: data.get('email'),
-            pwd: data.get('password')
+            password: data.get('password')
         }
 
         console.log(credentials);
