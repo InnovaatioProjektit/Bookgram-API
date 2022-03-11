@@ -20,7 +20,6 @@ export default (async (request, response ) => {
 
 
     const user = await auth(request.body.username)
-    console.log("A user logged in: ", user.id)
 
     if(!user){
         return response.status(401).send({ message: 'Invalid username or password' })
@@ -31,6 +30,8 @@ export default (async (request, response ) => {
             return response.status(200).send({ id: user.id, token: await accessSession(user), message: 'Login succesful' })
         }
     }
+
+    console.log("A user logged in: ", user.id)
 
     return response.status(401).send({ message: 'Invalid username or password' })
 
