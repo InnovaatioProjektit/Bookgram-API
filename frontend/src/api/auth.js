@@ -24,6 +24,7 @@ export async function register({username, password}){
  */
 export async function login({username, password}){
     return await api.post('api/users/login', {username, password}).then(res => {
+        console.log("trying token");
         const token = res.data.token 
         setToken(token)
         return [true, "getDecodedToken()"]
