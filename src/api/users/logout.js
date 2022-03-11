@@ -8,7 +8,7 @@ import { getSession, terminateSession } from '../../auth/pwd.js'
  * @route {POST} /api/users/logout/:id
  */
  export default (async (request, response) => {
-     const session = getSession(request.params.id)
+     const session = await getSession(request.params.id)
      terminateSession(session.id)
 
      if(session){
