@@ -78,7 +78,7 @@ export async function validateSession(token){
 }
 
 export async function terminateSession(session){
-    await global.db.query("DELETE FROM userSchema.Session WHERE Session.id = $1",
+    await global.db.query("DELETE FROM userSchema.Session WHERE userSchema.Session.id = $1",
         [session]).then(rawData => {
             return rawData.rowCount
     })

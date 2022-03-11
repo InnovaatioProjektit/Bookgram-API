@@ -14,12 +14,12 @@ CREATE TABLE IF NOT EXISTS userSchema.User(
 );
 
 CREATE TABLE IF NOT EXISTS userSchema.Session(
+    pid SERIAL NOT NULL,
     id INT NOT NULL,
     token VARCHAR(256) NOT NULL,
     expires BIGINT,
     
-    
-    PRIMARY KEY (id),
+    PRIMARY KEY (pid),
     FOREIGN KEY(id) REFERENCES userSchema.User(id)
 );
 
