@@ -22,7 +22,7 @@ export async function accessSession(user){
 }
 
 export async function getSession(token){
-    return await global.db.query("SELECT * FROM Session WHERE token = $1",
+    return await global.db.query("SELECT * FROM userSchema.Session WHERE token = $1",
         [token]).then(rawData => {
             if(rawData.rowCount){
                 return rawData.rows[0]
@@ -46,7 +46,7 @@ export async function validateSession(token){
             throw new Error(`User token ID ${id} not found`)
         }
 
-        const session = await global.db.query("SELECT token FROM userSchema.User, Session WHERE User.id = Session.id AND User.id = $1 AND Session.token = $2 ",
+        const session = await global.db.query("SELECT token FROM userSchema.User, userSchema.Session WHERE User.id = Session.id AND User.id = $1 AND Session.token = $2 ",
         [id, token]).then(rawData => {
             if(rawData.rowCount){
                 return rawData.rows[0]
@@ -78,7 +78,7 @@ export async function validateSession(token){
 }
 
 export async function terminateSession(session){
-    await global.db.query("DELETE FROM Session WHERE Session.id = $1",
+    await global.db.query("DELETE FROM userSchema.Session WHERE Session.id = $1",
         [session]).then(rawData => {
             return rawData.rowCount
     })
