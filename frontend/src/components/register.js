@@ -186,6 +186,7 @@ export default function Register(){
                         />
                   </Grid>
               </Grid>
+              <InfoPanel sx={{ mb: 3, mt: 5}} />
               <Button
                 type="submit"
                 fullWidth
@@ -194,7 +195,6 @@ export default function Register(){
                 >
               Sign In
             </Button>
-            <InfoPanel sx={{ mt: 11}} />
             <Grid container justifyContent="flex-end">
                 <Grid item>
 
