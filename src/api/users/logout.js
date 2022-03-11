@@ -9,7 +9,6 @@ import { getSession, terminateSession } from '../../auth/pwd.js'
  */
  export default (async (request, response) => {
      const session = await getSession(request.params.id)
-     terminateSession(session.id)
 
      if(session){
         const success = await terminateSession(session.id)
