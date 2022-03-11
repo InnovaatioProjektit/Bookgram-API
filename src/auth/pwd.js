@@ -35,7 +35,7 @@ export async function getSession(token){
 export async function validateSession(token){
     try {
         const {id} = jwt.verify(token, process.env.JWT_SECRET)
-        const user = await global.db.query("SELECT user FROM User WHERE id = $1", [id]).then(rawData => {
+        const user = await global.db.query("SELECT user FROM userSchema.User WHERE id = $1", [id]).then(rawData => {
             if(rawData.rowCount){
                 return  rawData.rows[0]
             }
@@ -46,7 +46,7 @@ export async function validateSession(token){
             throw new Error(`User token ID ${id} not found`)
         }
 
-        const session = await global.db.query("SELECT token FROM User, Session WHERE User.id = Session.id AND User.id = $1 AND Session.token = $2 ",
+        const session = await global.db.query("SELECT token FROM userSchema.User, Session WHERE User.id = Session.id AND User.id = $1 AND Session.token = $2 ",
         [id, token]).then(rawData => {
             if(rawData.rowCount){
                 return rawData.rows[0]
@@ -80,10 +80,6 @@ export async function validateSession(token){
 export async function terminateSession(session){
     await global.db.query("DELETE FROM Session WHERE Session.id = $1",
         [session]).then(rawData => {
-            if(rawData.rowCount){
-                return rawData.rows[0]
-            }
-
-            return null;
+            return rawData.rowCount
     })
 }

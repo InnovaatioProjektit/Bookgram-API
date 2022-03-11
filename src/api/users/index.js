@@ -21,8 +21,7 @@ router.post("/login",
     body("password").not().isEmpty().isLength({min: 4}).trim(),
 login)
 
-
-router.get("/logout", logout)
+router.get("/logout/:id", logout)
 
 router.post("/adduser", 
     body('username').not().isEmpty().trim().escape().custom(async value => {
