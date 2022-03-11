@@ -13,6 +13,7 @@ export async function validateToken(hash, hashb){
 
 export async function accessSession(user){
     const token = jwt.sign({id: user.id}, process.env.JWT_SECRET)
+    console.log(token)
     const expirationLifeTime = Date.now() + process.env.TOKEN_POLICY
     const userID = user.id
 
