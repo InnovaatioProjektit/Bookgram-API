@@ -17,7 +17,7 @@ const App = () => {
         decodedToken: getDecodedToken(), // hakee kirjautumisavaimen localStorage API:sta, jos se on tyhjä palauttaa null
     }
 
-    console.log(state.decodedToken)
+    console.log("decoded", state.decodedToken)
     const loggedIn = !!state.decodedToken
 
 
