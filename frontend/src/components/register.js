@@ -63,7 +63,7 @@ export default function Register(){
 
     function InfoPanel(props){
         return (
-            <Typography variant="body2" color="text.secondary" align="center" {...props}>
+            <Typography variant="body2" color="text.blue" align="center" {...props}>
                 {success && errMessage}
             </Typography>
         )
@@ -194,6 +194,7 @@ export default function Register(){
                 >
               Sign In
             </Button>
+            <InfoPanel sx={{ mt: 11}} />
             <Grid container justifyContent="flex-end">
                 <Grid item>
 
@@ -205,7 +206,6 @@ export default function Register(){
             </Grid>
         </Box>
         </Box>
-        <InfoPanel sx={{ mt: 10}} />
         </Container>
         </ThemeProvider>
     );
