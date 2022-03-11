@@ -64,7 +64,7 @@ export default function Register(){
     function InfoPanel(props){
         return (
             <Typography variant="body2" color="text.secondary" align="center" {...props}>
-                <h1> {success && errMessage} </h1>
+                {success && errMessage}
             </Typography>
         )
     }
@@ -205,7 +205,7 @@ export default function Register(){
             </Grid>
         </Box>
         </Box>
-        <InfoPanel sx={{ mt: 12}} />
+        <InfoPanel sx={{ mt: 10}} />
         </Container>
         </ThemeProvider>
     );
