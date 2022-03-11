@@ -18,6 +18,7 @@ import  { login } from '../api/auth'
 
 export default function Login(){
     const [errMessage, setMessage] = useState("")
+    const [success, setSuccess] = useState(false)
     
     const handleSubmit = async (event) => {
         event.preventDefault();
