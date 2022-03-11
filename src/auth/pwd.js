@@ -13,12 +13,11 @@ export async function validateToken(hash, hashb){
 
 export async function accessSession(user){
     const token = jwt.sign({id: user.id}, process.env.JWT_SECRET)
-    console.log(token)
     const expirationLifeTime = Date.now() + process.env.TOKEN_POLICY
     const userID = user.id
 
     const session = await global.db.query("INSERT INTO userSchema.Session (id, token, expires) VALUES ($1, $2, $3)", [userID, token, expirationLifeTime])
-    return session;
+    return token;
 }
 
 export async function getSession(token){

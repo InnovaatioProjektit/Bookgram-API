@@ -28,7 +28,7 @@ export default (async (request, response ) => {
         const verified = await validateToken(request.body.password, user.password)
 
         if(verified){
-            return response.status(200).send({ token: accessSession(user), message: 'Login succesful' })
+            return response.status(200).send({ token: await accessSession(user), message: 'Login succesful' })
         }
     }
 
