@@ -56,7 +56,7 @@ export default function Register(){
     function parseErrors(errors){
         let ret = ''
         errors.forEach(err => {
-            ret += err.param + " : " + err.msg + <br/>
+            ret += err.param + " : " + err.msg + " "
         })
 
         return ret;
@@ -64,7 +64,7 @@ export default function Register(){
 
     function InfoPanel(props){
         return (
-            <Typography variant="body2" color="text.secondary" align="center" {...props}>
+            <Typography variant="body3" color="text.secondary" align="center" {...props}>
                 {success && errMessage}
             </Typography>
         )
@@ -206,7 +206,7 @@ export default function Register(){
             </Grid>
         </Box>
         </Box>
-        <InfoPanel sx={{ mt: 8}} />
+        <InfoPanel sx={{ mt: 12}} />
         </Container>
         </ThemeProvider>
     );
