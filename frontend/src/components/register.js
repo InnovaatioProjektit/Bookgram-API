@@ -43,14 +43,13 @@ export default function Register(){
         console.log(credentials);
 
         const [stat, token] = await register(credentials)
-        console.log(token)
         setSuccess(!stat) 
         setMessage( stat ? parseResponse(token) : parseErrors(token))
         
     };
 
     function parseResponse(res) {
-        return res.data.message
+        return res.message
     }
 
     function parseErrors(errors){
