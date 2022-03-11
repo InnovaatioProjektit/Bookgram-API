@@ -23,13 +23,13 @@ export async function register({username, password}){
  * @returns palauttaa kirjautumisavaimen
  */
 export async function login({username, password}){
-    return api.post('api/users/login', {username, password}).then(res => {
+    return await api.post('api/users/login', {username, password}).then(res => {
         const token = res.data.token 
         setToken(token)
-        return getDecodedToken()
+        return [true, getDecodedToken()]
     }).catch(res => {
         if(res.response.status == 400 || res.response.status === 401){
-            alert("There was an error with your username or password. Please try again.")
+            return [false, "There was an error with your username or password. Please try again."]
         }
     })
 }

@@ -17,8 +17,9 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import  { login } from '../api/auth'
 
 export default function Login(){
+    const [errMessage, setMessage] = useState("")
     
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
 
@@ -28,8 +29,19 @@ export default function Login(){
         }
 
         console.log(credentials);
-        login(credentials)
+        const [stat, token] = login(credentials)
+        setSuccess(!stat)
+        setMessage(stat ? "token" : token)
     };
+
+
+    function InfoPanel(props){
+      return (
+          <Typography variant="body2" color="red" align="center" {...props}>
+              {success && errMessage}
+          </Typography>
+      )
+  }
 
     const theme = createTheme();
 
@@ -75,6 +87,7 @@ export default function Login(){
               control={<Checkbox value="remember" color="primary" />}
               label="Remember, you are here forever"
             />
+            <InfoPanel sx={{ mb: 1, mt: 1}} />
             <Button
               type="submit"
               fullWidth
