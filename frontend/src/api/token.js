@@ -6,7 +6,7 @@ const key = 'token'
 
 export function storeToken(token){
     if(token){
-        localStorage(key, token)
+        localStorage.setItem(key, token)
     }
 }
 
