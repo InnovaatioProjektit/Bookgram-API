@@ -64,7 +64,7 @@ export default function Register(){
     function InfoPanel(props){
         return (
             <Typography variant="body2" color="text.secondary" align="center" {...props}>
-                {success && errMessage}
+                <h1> {success && errMessage} </h1>
             </Typography>
         )
     }
