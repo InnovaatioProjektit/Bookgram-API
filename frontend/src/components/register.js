@@ -186,7 +186,7 @@ export default function Register(){
                         />
                   </Grid>
               </Grid>
-              <InfoPanel sx={{ mb: 3, mt: 5}} />
+              <InfoPanel sx={{ mb: 1, mt: 1}} />
               <Button
                 type="submit"
                 fullWidth
