@@ -18,7 +18,7 @@ const router = Router();
 
 router.post("/login", 
     body("username").not().isEmpty().isLength({min: 3}).trim(),
-    body("password").not().isEmpty().trim(),
+    body("password").not().isEmpty().isLength({min: 4}).trim(),
 login)
 
 

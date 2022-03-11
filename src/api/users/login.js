@@ -19,18 +19,17 @@ export default (async (request, response ) => {
         }
 
 
-    const user = await auth(req.body.username)
+    const user = await auth(request.body.username)
+    console.log("A user logged in: ", user)
 
     if(!user){
         return response.status(401).send({ message: 'Invalid username or password' })
     }else{
-        const verified = await validateToken(req.body.password, user.password)
+        const verified = await validateToken(request.body.password, user.password)
 
         if(verified){
             return response.status(200).send({ message: 'Login succesful' })
         }
-
-        console.log("A user logged in: ", user)
     }
 
     return res.status(401).send({ message: 'Invalid username or password' })
