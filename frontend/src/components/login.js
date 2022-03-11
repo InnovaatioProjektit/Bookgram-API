@@ -1,4 +1,5 @@
 import React, {useEffect, useRef, useState, useMemo} from "react";
+import {useNavigate} from 'react-router-dom'
 import { Link as RouterLink } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -19,6 +20,7 @@ import  { login } from '../api/auth'
 export default function Login(){
     const [errMessage, setMessage] = useState("")
     const [success, setSuccess] = useState(false)
+    const navigate = useNavigate()
     
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -34,6 +36,10 @@ export default function Login(){
         const [stat, token] = await login(credentials)
         setSuccess(!stat)
         setMessage(stat ? "token" : token)
+
+        if(stat){
+          navigate("/");
+        }
     };
 
 
