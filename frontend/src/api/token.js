@@ -12,6 +12,7 @@ export function storeToken(token){
 
 export function validateToken(token){
     if(token){
+        console.log(token)
         const header = decodeJWT(token)
         const now = Math.floor(Date.now() / 1000)
         return header && header.exp > now
