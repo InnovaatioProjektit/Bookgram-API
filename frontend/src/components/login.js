@@ -30,7 +30,7 @@ export default function Login(){
         }
 
         console.log(credentials);
-        const [stat, token] = login(credentials)
+        login(credentials)
         setSuccess(!stat)
         setMessage(stat ? "token" : token)
     };
