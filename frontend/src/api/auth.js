@@ -28,6 +28,7 @@ export async function login({username, password}){
         setToken(token)
         return [true, getDecodedToken()]
     }).catch(res => {
+        console.log(res)
         if(res.response.status == 400 || res.response.status === 401){
             return [false, "There was an error with your username or password. Please try again."]
         }
