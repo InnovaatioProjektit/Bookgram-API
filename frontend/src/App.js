@@ -10,24 +10,30 @@ import Register from './components/register'
 import NotFound from "./components/notFound";
 
 
+const sections = [
+    { title: 'Kaikki kirjat', url: '/books' },
+    { title: 'Oma kokoelma', url: '/booklist' },
+    { title: 'Omat Arvostelut', url: '/' }
+  ];
+
+
 const App = () => {
     const navigate = useNavigate();
 
     const state = {
+        title: "Hello Books",
         decodedToken: getDecodedToken(), // hakee kirjautumisavaimen localStorage API:sta, jos se on tyhjä palauttaa null
     }
 
-    console.log("decoded", state.decodedToken)
     const loggedIn = !!state.decodedToken
 
-
-    const RequireAuth = ({component}) => {
-        return loggedIn ? component : <Navigate to="register" />
+    const RequireAuth = ({ children }) => {
+        return loggedIn ? children : <Navigate to="register" />
     }
-
 
     return (
         <div className="App">
+            <Header state={state} sections={sections} />
             <Routes>
                 <Route exact path="/" element={ <RequireAuth> <Home /> </RequireAuth> } />
                 <Route path="login" element={<Login />}/>

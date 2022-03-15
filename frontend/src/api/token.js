@@ -24,8 +24,8 @@ export function getValidToken(){
     if(validateToken(token)){
         return token
     }
-    // TODO to null
-    return token
+    
+    return null
 }
 
 export function getDecodedToken(){

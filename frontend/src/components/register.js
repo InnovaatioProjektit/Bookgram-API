@@ -9,6 +9,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { isRequired, validateEmail } from '../utils/inputValidation'
 
 import  { register } from '../api/auth'
 
@@ -61,21 +62,18 @@ export default function Register(){
         return ret;
     }
 
+    /**
+     * Ongelmatilanteiden info
+     * 
+     * @param {props} paneelin asetelma 
+     * @returns palauttaa infopoaneelin typograafin
+     */
     function InfoPanel(props){
         return (
             <Typography variant="body2" color="text.blue" align="center" {...props}>
                 {success && errMessage}
             </Typography>
         )
-    }
-
-    /**
-     * Sanitize input string
-     * @param {string} value 
-     * @returns 
-     */
-    function isRequired(value){
-        return value != null && value.trim().length > 0;
     }
 
     const theme = createTheme();
@@ -88,15 +86,6 @@ export default function Register(){
     const validatePasswords = (lpwd, rpwd) => {
         const valid = isRequired(lpwd) && isRequired(rpwd)
         setPwdMatch(lpwd == rpwd && valid)
-    }
-
-    
-
-
-    const validateEmail = (e) => {
-        // regex from http://stackoverflow.com/questions/46155/validate-email-address-in-javascript
-        var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return re.test(e) && isRequired(e)
     }
 
 

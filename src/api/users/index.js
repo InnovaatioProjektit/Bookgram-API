@@ -16,13 +16,24 @@ import register from './register.js'
 
 const router = Router();
 
+
+/**
+ * Käyttäjän sisäänkirjautuminen. Salasanan pitää olla vähintään 4 kirjaimen pituinen
+ */
 router.post("/login", 
     body("username").not().isEmpty().trim(),
     body("password").not().isEmpty().isLength({min: 4}).trim(),
 login)
 
+/**
+ * Uloskirjautuminen tuhoaa käyttäjän avaimen (token)
+ */
 router.get("/logout/:id", logout)
 
+
+/**
+ * Luo uusi käyttäjätunnus. Salananan pitää olla vähintään 4 kirjaimen pituinen
+ */
 router.post("/adduser", 
     body('username').not().isEmpty().trim().escape().custom(async value => {
         const user = await findUserByName(value);

@@ -24,3 +24,11 @@ CREATE TABLE IF NOT EXISTS userSchema.Session(
 );
 
 
+CREATE TABLE IF NOT EXISTS bookSchema.Book(
+    id SERIAL NOT NULL,
+    
+    
+    PRIMARY KEY (pid)
+);
+
+

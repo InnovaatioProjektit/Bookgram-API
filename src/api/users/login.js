@@ -3,7 +3,7 @@ import { validationResult } from 'express-validator';
 import { auth } from './model/user.js'
 import { validateToken, accessSession } from '../../auth/pwd.js'
 /** 
- * Kirjaa käyttäjä sisälle
+ * Kirjaa käyttäjä sisään
  * 
  * @name users post
  * @route {POST} /api/users/login
@@ -21,18 +21,14 @@ export default (async (request, response ) => {
 
     const user = await auth(request.body.username)
 
-    if(!user){
-        return response.status(401).send({ message: 'Invalid username or password' })
-    }else{
+    if(user){
         const verified = await validateToken(request.body.password, user.password)
 
         if(verified){
-            return response.status(200).send({ id: user.id, token: await accessSession(user), message: 'Login succesful' })
+            console.log("A user logged in: ", user.id)
+            return response.status(200).send({ id: user.id, token: await accessSession(user), username: user.username, message: 'Login successful' })
         }
     }
 
-    console.log("A user logged in: ", user.id)
-
     return response.status(401).send({ message: 'Invalid username or password' })
-
 })

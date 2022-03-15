@@ -1,7 +1,6 @@
 import React, {useEffect, useRef, useState, useMemo} from "react";
 import {useNavigate} from 'react-router-dom'
 import { Link as RouterLink } from "react-router-dom";
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -10,21 +9,29 @@ import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { isRequired, validateEmail } from '../utils/inputValidation'
 
 import  { login } from '../api/auth'
 
 export default function Login(){
     const [errMessage, setMessage] = useState("")
     const [success, setSuccess] = useState(false)
+    const [illegalPass, setPassErr] = useState(false)
+    const [illegalEmail, setEmailErr] = useState(false)
     const navigate = useNavigate()
     
     const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
+
+        setPassErr(!isRequired(data.get('password')))
+
+        if(illegalPass || illegalEmail){
+          return
+        }
 
         const credentials = {
             username: data.get('email'),
@@ -73,6 +80,8 @@ export default function Login(){
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
+              error = { illegalEmail }
+              helperText={illegalEmail && "Type a valid Email Address" }
               margin="normal"
               required
               fullWidth
@@ -81,8 +90,11 @@ export default function Login(){
               name="email"
               autoComplete="email"
               autoFocus
+              onChange= {(e) => { setEmailErr(!validateEmail(e.target.value)) }}
             />
             <TextField
+              error = { illegalPass }
+              helperText = { illegalPass && "Password must not be empty"}
               margin="normal"
               required
               fullWidth
