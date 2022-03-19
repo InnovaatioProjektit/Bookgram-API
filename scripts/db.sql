@@ -1,6 +1,7 @@
 \c projo;
 
 CREATE SCHEMA IF NOT EXISTS userSchema;
+CREATE SCHEMA IF NOT EXISTS bookSchema;
 
 
 CREATE TABLE IF NOT EXISTS userSchema.User(
@@ -23,12 +24,27 @@ CREATE TABLE IF NOT EXISTS userSchema.Session(
     FOREIGN KEY(id) REFERENCES userSchema.User(id)
 );
 
+CREATE TABLE IF NOT EXISTS bookSchema.Review(
+    id SERIAL NOT NULL,
+    userID INT NOT NULL,
+    bookID INT NOT NULL,
+    score INT NOT NULL,
+
+    FOREIGN KEY(userID) REFERENCES userSchema.User(id),
+    FOREIGN KEY(bookID) REFERENCES bookSchema.Book(id),
+
+    CONSTRAINT Book_review UNIQUE (userID, bookID)
+);
 
 CREATE TABLE IF NOT EXISTS bookSchema.Book(
     id SERIAL NOT NULL,
-    
-    
-    PRIMARY KEY (pid)
+    tag VARCHAR(32) NOT NULL,
+    userID INT NOT NULL,
+
+    PRIMARY KEY (id),
+    FOREIGN KEY (userID) REFERENCES userSchema.User(id)
+
+    CONSTRAINT Book_volume UNIQUE (userID, tag)
 );
 
 

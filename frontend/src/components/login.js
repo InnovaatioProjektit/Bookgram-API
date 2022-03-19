@@ -46,6 +46,7 @@ export default function Login(){
 
         if(stat){
           console.log(token)
+          
           navigate("/");
         }
     };

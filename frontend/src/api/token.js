@@ -4,12 +4,23 @@ import decodeJWT from 'jwt-decode'
  */
 const key = 'token'
 
+
+/**
+ * Lisää käyttäjän avain lcoalStorageen
+ * 
+ * @param {string} token 
+ */
 export function storeToken(token){
     if(token){
         localStorage.setItem(key, token)
     }
 }
 
+/**
+ * Validoi, että avain on tuore
+ * @param {string} token 
+ * @returns totta, jos avain on aito ja tuore
+ */
 export function validateToken(token){
     if(token){
         const header = decodeJWT(token)
@@ -19,6 +30,11 @@ export function validateToken(token){
     return false
 }
 
+/**
+ * Validoi avain
+ * 
+ * @returns palauttaa avaimen jos se on tuore
+ */
 export function getValidToken(){
     const token = localStorage.getItem(key)
     if(validateToken(token)){
@@ -28,6 +44,11 @@ export function getValidToken(){
     return null
 }
 
+
+/**
+ * dekoodaa avain
+ * @returns dekoodattu JSON avaimesta
+ */
 export function getDecodedToken(){
     const token = getValidToken()
     if(token){

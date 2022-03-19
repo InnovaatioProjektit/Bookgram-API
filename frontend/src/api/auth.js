@@ -1,5 +1,5 @@
 import api, { setToken } from './init' 
-import { getDecodedToken } from './token'
+import { removeToken, getValidToken, getDecodedToken } from './token'
 
 /**
  * Lähettää POST pyynnön /api/users/adduser nimellä ja salasanalla. 
@@ -26,9 +26,6 @@ export async function login({username, password}){
     return await api.post('api/users/login', {username, password}).then(res => {
         const token = res.data.token 
         setToken(token)
-        localStorage.setItem("username", res.data.username)
-        localStorage.setItme("userID", res.data.id)
-
 
         return [true, getDecodedToken()]
     }).catch(res => {
@@ -40,8 +37,15 @@ export async function login({username, password}){
 }
 
 /**
- * Kirjautuu ulos
+ * Kirjautuu ulos 
+ * @returns palauttaa true, jos tokenin poisto onnistui
  */
-export function logout(){
-    setToken(null)
+export async function logout(){
+    localStorage.removeItem('token') 
+    return await api.post('api/users/logout').then(res => {  
+        if(res.status == 200){
+            return true
+        }
+        return false
+    })
 }

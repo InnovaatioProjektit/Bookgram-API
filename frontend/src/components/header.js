@@ -1,33 +1,42 @@
 import React, {useEffect, useRef, useState, useMemo} from "react";
-import { Link } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { Toolbar, Button, IconButton, Typography} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 
+import  { logout } from '../api/auth'
+
 export default function Header(props){
     const {state, sections} = props;
+    let token = state.useAuth()
+    const loggedIn = !!token
 
-    const loggedIn = !!state.decodedToken
+    const navigate = useNavigate()
 
     function RegisterButton(){
         return(
             <Link to="/register"><Button variant="outlined" size="large">
-                        Sign Up
+                        Join Club
                     </Button></Link>
         )
     }
 
     function LogoutButton(){
         return(
-            <Link to="/logout"><Button variant="outlined" size="large">
+            <Button variant="outlined" size="large" onClick={(ev) => {
+                const success = logout()
+                if(success){
+                    navigate("/login")
+                }
+            }}>
                         Log out
-                    </Button></Link>
+                    </Button>
         )
     }
     
     return(
         <React.Fragment>
             <Toolbar sx={{ borderBotton: 1, borderColor: 'divider', backgroundColor: "#eceff1"  }}>
-                {!loggedIn && <Link to="/login"><Button size="large">Login</Button></Link> }
+                {loggedIn ? <h5>Logged in as {token.user}</h5> : <Link to="/login"><Button size="large">Login</Button></Link> }
                 <Typography 
                     component="h2"
                     variant="h5"
@@ -39,17 +48,17 @@ export default function Header(props){
                     <IconButton>
                         <SearchIcon />
                     </IconButton>
-                    {loggedIn ? <LogoutButton/> : <RegisterButton/> }
+                    {!!token ? <LogoutButton/> : <RegisterButton/> }
             </Toolbar>
             <Toolbar 
                 component="nav"
                 variant="dense"
                 sx={{ justifyContent: 'space-between', overflowX: 'auto'}}
                 >
-                   {sections.map((section) => {
-                       <Link to={section.url}
+                   {loggedIn && sections.map((section) => {
+                       return <Link to={section.url}
                         color="inherit"
-                        noWrap 
+                        nowrap="true"
                         key={section.title}
                         variant="body"
                         sx={{p: 1, flexShrink: 0}}

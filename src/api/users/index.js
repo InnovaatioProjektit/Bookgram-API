@@ -2,6 +2,8 @@ import { Router } from 'express'
 import { body, param, validationResult } from 'express-validator';
 import {findUserByName} from '../users/model/user.js'
 
+import { authentication } from '../../auth/pwd.js';
+
 import login from './login.js'
 import logout from './logout.js'
 import register from './register.js'
@@ -20,7 +22,7 @@ const router = Router();
 /**
  * Käyttäjän sisäänkirjautuminen. Salasanan pitää olla vähintään 4 kirjaimen pituinen
  */
-router.post("/login", 
+router.post("/login",
     body("username").not().isEmpty().trim(),
     body("password").not().isEmpty().isLength({min: 4}).trim(),
 login)
@@ -28,7 +30,7 @@ login)
 /**
  * Uloskirjautuminen tuhoaa käyttäjän avaimen (token)
  */
-router.get("/logout/:id", logout)
+router.post("/logout", authentication, logout)
 
 
 /**

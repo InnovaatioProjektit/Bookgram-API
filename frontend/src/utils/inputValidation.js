@@ -23,3 +23,20 @@
  export function isRequired(value){
     return value != null && value.trim().length > 0;
 }
+
+/**
+ * Todella iso teksti katkaista pieneksi pätkäksi, preview muotoon.
+ * 
+ * Käyttö:
+ * 
+ * const str = limit("hello World", 6)
+ * // 'hello ...'
+ * 
+ * @param {string} string 
+ * @param {number} limit 
+ * @returns 
+ */
+export function limit (string = '', limit = 0, cut = ' ...') {  
+    return string.substring(0, limit) + cut
+  }
+  

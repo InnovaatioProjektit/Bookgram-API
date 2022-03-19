@@ -1,20 +1,77 @@
-import React, {useEffect, useRef, useState, useMemo} from "react";
-import { Link } from "react-router-dom";
+import React, {useEffect, useState} from "react";
 
-const sections = [
-    { title: 'Kaikki kirjat', url: '#' },
-    { title: 'Oma kokoelma', url: '#' },
-    { title: 'Omat Arvostelut', url: '#' }
-  ];
+import CssBaseline from '@mui/material/CssBaseline';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
 
-function Home() {
+
+import books from "../api/books";
+import BookCard from "./bookCard";
+
+
+function Home(props) {
+  const {state} = props;
+  const [volume, setVolume] = useState([])  // fill volume with book data from Google Books
+
+  const { id } = state.useAuth()
+
+  useEffect(() => {
+    (async function fetchBooks(){
+      const { data } = await books()
+      if(data){
+        data.user = id
+        setVolume(data.items)
+        console.log(data)
+      }
+    }())
+  }, [id])
+
+  const theme = createTheme();
+
   return (
-    
-    <div>
-      <h1>This is the home page</h1>
-      <Link to="about">Click to view our about page</Link>
-      <Link to="contact">Click to view our contact page</Link>
-    </div>
+    <ThemeProvider theme={theme}>
+    <CssBaseline />
+    <Container maxWidth="sm">
+            <Typography
+              component="h1"
+              variant="h3"
+              align="center"
+              color="text.primary"
+              gutterBottom
+            >
+              All Books
+            </Typography>
+            <Typography variant="h5" align="center" color="text.secondary" paragraph>
+              <b>{state.title}</b> is a book club. Here you can find your favorite books and 
+              authors, add your favorites in collections and review your latest 
+              books.
+            </Typography>
+            <Stack
+              sx={{ pt: 4 }}
+              direction="row"
+              spacing={2}
+              justifyContent="center"
+            >
+              
+            </Stack>
+    </Container>
+    <Container sx={{ py: 8 }} maxWidth="md">
+    <Grid container spacing={4}>
+
+    {volume.map((card) => (
+      <Grid item key={card.id} xs={12} sm={6} md={4}>
+        <BookCard id={id} data={card} />
+      </Grid>
+    ))}
+
+    </Grid>
+    </Container>
+
+    </ThemeProvider>
   );
 }
 

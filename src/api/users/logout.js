@@ -5,15 +5,15 @@ import { getSession, terminateSession } from '../../auth/pwd.js'
  * Kirjaa käyttäjä ulos palvelusta
  * 
  * @name users post
- * @route {POST} /api/users/logout/:id
+ * @route {POST} /api/users/logout
  */
  export default (async (request, response) => {
-     const session = await getSession(request.params.id)
-
-     if(session){
-        const success = await terminateSession(session.id)
-        return response.status(200).json({rows: success, message: "You have logged out"})
+     if(request.id){
+        const success = await terminateSession(request.id)
+        console.log(`A user logged out: ${request.id} `)
+        return response.status(200).json({rows: success, message: "OK"})
+        
      }
 
-     return response.status(400).json({message: "Unknown token was given"})
+     return response.status(401).json({message: "Invalid Token"})
 })

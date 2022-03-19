@@ -18,15 +18,14 @@ export default (async (request, response ) => {
             })
         }
 
-
     const user = await auth(request.body.username)
 
     if(user){
         const verified = await validateToken(request.body.password, user.password)
 
         if(verified){
-            console.log("A user logged in: ", user.id)
-            return response.status(200).send({ id: user.id, token: await accessSession(user), username: user.username, message: 'Login successful' })
+            console.log("A user logged in: ", user.id, user.username)
+            return response.status(200).send({token: await accessSession(user), message: 'Login successful' })
         }
     }
 

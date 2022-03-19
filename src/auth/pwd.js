@@ -12,8 +12,8 @@ export async function validateToken(hash, hashb){
 }
 
 export async function accessSession(user){
-    const token = jwt.sign({id: user.id}, process.env.JWT_SECRET)
     const expirationLifeTime = Date.now() + process.env.TOKEN_POLICY
+    const token = jwt.sign({id: user.id, user: user.username}, process.env.JWT_SECRET, {"expiresIn": "1h"})
     const userID = user.id
 
     const session = await global.db.query("INSERT INTO userSchema.Session (id, token, expires) VALUES ($1, $2, $3)", [userID, token, expirationLifeTime])
@@ -31,22 +31,29 @@ export async function getSession(token){
     })
 }
 
-export async function validateSession(token){
+/**
+ * Validoi, että käyttäjän avain on olemassa, se on tuore ja käyttäjänsä omistama JWT token.
+ * 
+ * @param {string} token avain jota validoitaan
+ * @param {boolean} refresh päivitetäänkö sessio
+ * @returns valid:true, jos validi avain. Palauttaa tuore token, jos refresh on true
+ */
+export async function validateSession(token, refresh){
     try {
-        const {id} = jwt.verify(token, process.env.JWT_SECRET)
-        const user = await global.db.query("SELECT user FROM userSchema.User WHERE id = $1", [id]).then(rawData => {
+        const {err, id, user} = jwt.verify(token, process.env.JWT_SECRET)
+        const db_user = await global.db.query("SELECT username FROM userSchema.User WHERE id = $1", [id]).then(rawData => {
             if(rawData.rowCount){
-                return  rawData.rows[0]
+                return rawData.rows[0]
             }
             return null;
         });
-        
-        if(!user){
-            throw new Error(`User token ID ${id} not found`)
+
+        if(err || !user || db_user.username != user){
+            throw new Error(`verification of usertoken ${id} failed`)
         }
 
-        const session = await global.db.query("SELECT token FROM userSchema.User, userSchema.Session WHERE User.id = Session.id AND User.id = $1 AND Session.token = $2 ",
-        [id, token]).then(rawData => {
+        const session = await global.db.query("SELECT token, expires FROM userSchema.User, userSchema.Session WHERE userSchema.User.id = userSchema.Session.id AND UserSchema.User.id = $1 AND userSchema.Session.token = $2",
+        [parseInt(id), token]).then(rawData => {
             if(rawData.rowCount){
                 return rawData.rows[0]
             }
@@ -55,30 +62,51 @@ export async function validateSession(token){
         })
 
         if(!session){
-            throw new Error(`User ${id} token ownership unverified`)
+            throw new Error(`User token ownership unverified`)
         }
 
         const {expires} = session
 
         if(expires <= Date.now()){
-            await terminateSession()
-            throw new Error(`User ${id} token has expired. Expiration Date:  ${expires} `)
+            await terminateSession(token)
+            throw new Error(`User token has expired. Expiration Date:  ${expires} `)
         }
 
-        // TODO refresh session
-        // newSession and terminate SEssion
+        let curSession
+        if(refresh){
+            curSession = await accessSession(user)
+            await terminateSession(token)
+        }
 
-        let curSession 
-        return {valid: true, curSession}
+        return {valid: true, id: id, curSession}
     
     }catch(err){
-        return {valid: false}
+        return {valid: false, message: err.toString()}
     }
 }
 
-export async function terminateSession(session){
+/**
+ * Authenticate JWT token as belonging to the user
+ *
+ */
+export async function authentication(request, response, next){
+    const header = request.header('authorization')
+    const token = header && header.split(' ')[1]
+    if(token == null){
+        return response.redirect('/login')
+    }
+
+    const {message, valid, id} = await validateSession(token)
+    if(!valid){
+        return response.status(403).send(message)
+    }
+    request.id = id
+    next()
+}
+
+export async function terminateSession(sessionID){
     await global.db.query("DELETE FROM userSchema.Session WHERE userSchema.Session.id = $1",
-        [session]).then(rawData => {
+        [sessionID]).then(rawData => {
             return rawData.rowCount
     })
 }
