@@ -10,8 +10,10 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 
 
-import { getBooks, tagToBook } from "../api/books";
+import { getBooks, tagToBook, removeBook } from "../api/books";
 import BookCard from "./bookCard";
+
+import Toast from './Toast'
 
 /**
  * Käyttäjän tekemät arvostelut
@@ -23,25 +25,43 @@ function BookCollection(props) {
   const { state } = props;
   const { id } = state.useAuth()
   const [volume, setVolume] = useState([])  // fill volume with book data from Google Books based on tag
-  const {lock, setLock} = useState(false)
-
+  const [refresh, setRefresh] = useState(false)
 
   useEffect(() => {
     (async function fetchBooks(){
       const { data } = await getBooks(id)
       if(data){
-        const tagged = []
-        data.rows.forEach(async bid => {
-          console.log(1)
-          tagged.push(bid)
-          //tagged.push( await tagToBook(bid))
-        })
-
-        //setVolume(tagged)
+        console.log(data)
+        //tagBooks(data)
       }
     }())
     
-  }, [id, volume, setVolume, lock])
+  }, [id])
+
+
+  useEffect(() => {
+    console.log(volume)
+
+  }, [volume])
+
+
+
+  /**
+   * Täydennä kirjatiedot Google Books Apilla.
+   * @param {*} dat kirjantiedot tietokannasta
+   */
+  function tagBooks(dat){
+    dat.forEach(async (book) => {
+      const b = await tagToBook(book)
+      /**
+       * Refresh on tapa päivittää volume, ilman infinite looppia mitä muuten tapahtuisi useEffectisä.
+       */
+      setVolume((prev) => [...prev, {id: book.id, data: b.data} ])
+    })
+
+  }
+
+  
 
   const theme = createTheme();
 
@@ -75,8 +95,8 @@ function BookCollection(props) {
     <Container sx={{ py: 8 }} maxWidth="md">
     <Grid container spacing={4}>
     {volume.map((card) => (
-      <Grid item key={card.id} xs={12} sm={6} md={4}>
-       
+      <Grid item key={card.id} xs={12} sm={6} md={4}   >
+        <BookCard uid={id} id={card.id} data={card.data} listed={true} />
       </Grid>
     ))}
 

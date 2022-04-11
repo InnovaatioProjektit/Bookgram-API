@@ -9,7 +9,7 @@ import Login from './components/login'
 import Register from './components/register'
 import NotFound from "./components/notFound";
 
-import BookCollection from './components/booklist'
+import BookList from './components/booklist'
 import BookReviews from './components/bookreviews'
 
 
@@ -31,7 +31,7 @@ const App = () => {
     }
 
     const RequireAuth = ({ children }) => {
-        return !!state.useAuth() ? children : <Navigate to="register" />
+        return !!state.useAuth() ? children : <Navigate to="/register" />
     }
 
     return (
@@ -41,7 +41,7 @@ const App = () => {
             <Routes>
                 <Route exact path="/" element={ <RequireAuth> <Home state={state} /> </RequireAuth> } />
                 <Route path="reviews" element={ <RequireAuth> <BookReviews /> </RequireAuth> }/>
-                <Route path="booklist" element={ <RequireAuth> <BookCollection state={state} /> </RequireAuth> }/>
+                <Route path="booklist" element={ <RequireAuth> <BookList state={state} /> </RequireAuth> }/>
                 <Route path="login" element={<Login />}/>
                 <Route path="register" element={<Register />}/>
                 <Route path="*" element={<NotFound />}/>

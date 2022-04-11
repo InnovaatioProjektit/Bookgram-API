@@ -1,7 +1,7 @@
 import pool from './../../../utils/db.js'
 
 /**
- * Määrittelee kirjojen tietokanta skeeman
+ * Määrittelee kirjojen tietokanta skeeman BookDAO
  * @module bookModel
  * @category Models
  */

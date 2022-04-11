@@ -12,9 +12,14 @@ import Grid from '@mui/material/Grid';
 import books from "../api/books";
 import BookCard from "./bookCard";
 
+import ReactDOM from 'react-dom'
+
+import Toast from './Toast'
+
 
 function Home(props) {
   const {state} = props;
+  const [message, setMessage] = useState("")
   const [volume, setVolume] = useState([])  // fill volume with book data from Google Books
 
   const { id } = state.useAuth()
@@ -23,9 +28,7 @@ function Home(props) {
     (async function fetchBooks(){
       const { data } = await books()
       if(data){
-        data.user = id
         setVolume(data.items)
-        console.log(data)
       }
     }())
   }, [id])
@@ -36,6 +39,7 @@ function Home(props) {
     <ThemeProvider theme={theme}>
     <CssBaseline />
     <Container maxWidth="sm">
+            <Toast message="hello" horizontal="left" vertical="top" severity="success" />
             <Typography
               component="h1"
               variant="h3"
@@ -64,7 +68,7 @@ function Home(props) {
 
     {volume.map((card) => (
       <Grid item key={card.id} xs={12} sm={6} md={4}>
-        <BookCard id={id} data={card} />
+        <BookCard uid={id} data={card} />
       </Grid>
     ))}
 

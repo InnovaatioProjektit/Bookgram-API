@@ -26,15 +26,15 @@ import MuiAlert from '@mui/material/Alert';
 export default (props) => {
     const [open, setOpen] = React.useState(true);
 
-    const {vertical, horizontal} = props;
+    const {message, severity, vertical, horizontal} = props;
 
     return (
         <Fragment>
           <Snackbar
             autoHideDuration={6000}
             anchorOrigin={{ vertical, horizontal }}
-            key={vertical + horizontal}
-            message={props.message}
+            key={ vertical + horizontal }
+            message={ message }
             open={open}
             onClose={(event, reason) => {
               // `reason === 'escapeKeyDown'` if `Escape` was pressed
@@ -42,11 +42,11 @@ export default (props) => {
               // call `event.preventDefault` to only close one Snackbar at a time.
             }}
           >
-              <Alert onClose={() => setOpen(false)} severity="success" sx={{ width: '100%' }}>
-                This is a success message!
+              <Alert onClose={() => setOpen(false)} severity={ severity } sx={{ width: '100%' }}>
+                { message }
             </Alert>
           </Snackbar>
-          <Snackbar open={open} onClose={() => setOpen(false)} />
+          
         </Fragment>
       );
 

@@ -33,7 +33,6 @@ export default async () => {
  */
 export async function tagToBook({ tag }){
     return await axios.get(options.url + '/' + tag).then((response) => {
-        console.log(response.data)
         return {data: response.data}
     }).catch((error) => {
         return {err: error}
@@ -60,13 +59,16 @@ export async function tagToBook({ tag }){
 
 
 /**
- * Hae käyttäjän kokoelmasta kaikki kirjat
- * @param {string} tag
+ * Hae käyttäjän kokoelmasta kaikki kirjat 
+ * 
+  * @param {string} tag
  * @returns palauttaa haetun  kokoelman kirjojen tiedot
  */
  export async function getBooks( id ){
-    return await api.get('/api/books/collection/' + 0).then(res => {
-        return {data: res.data}
+    return await api.get('/api/books/collection/' + id).then(res => {
+
+        return {data: res.data.rows}
+
     }).catch(res => {
         if(res.response.status == 400 || res.response.status === 401) {
             return {err: res.response.data}
@@ -98,7 +100,7 @@ export async function tagToBook({ tag }){
  * @returns palauttaa haetun kirjan tiedot
  */
  export async function removeBook({ user, tag }){
-    return await api.delete('/api/books/collection', {user, tag}).then(res => {
+    return await api.delete('/api/books/collection', {data: {user, tag}}).then(res => {
         return {data: res.data}
     }).catch(res => {
         if(res.response.status == 400 || res.response.status === 401){

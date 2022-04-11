@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { body, param, validationResult } from 'express-validator';
 import { authentication } from '../../auth/pwd.js';
 
-import collection, { collections, volume, addVolume } from './collection.js';
+import collection, { collections, volume, addVolume, removeVolume } from './collection.js';
 import reviews, { addreview } from './reviews.js';
 
 
@@ -59,6 +59,13 @@ router.get("/collection/:id",
   body("tag").not().isEmpty().trim(), authentication, addVolume)
 
 
- 
+
+/**
+ * Poista kirja käyttäjän kokoelmasta
+ */
+ router.delete("/collection",
+  body("user").isNumeric(),
+  body("tag").not().isEmpty().trim(), authentication, removeVolume)
+
 
 export default router;

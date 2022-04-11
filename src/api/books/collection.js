@@ -1,5 +1,5 @@
 import { validationResult } from 'express-validator';
-import { getBooksByCollection, getCollectionByID, getBook, createBook } from './model/book.js'
+import { getBooksByCollection, getCollectionByID, getBook, createBook, removeBook } from './model/book.js'
 
 /** 
  * Hae kirjakokoelman kaikki kirjat
@@ -117,15 +117,15 @@ export async function collections(request, response){
        })
    }
 
+
    const rows = await removeBook({
       user: request.body.user,
       tag: request.body.tag
    })
 
    if(rows >= 1){
-
       console.log(`A user ${request.body.user} removed a book ${request.body.tag} from their collection`)
-      return response.status(200).json({rows: id, message:"Book removed from user collection"})
+      return response.status(200).json({rows: rows, message:"Book removed from user collection"})
    }
 
    return response.status(401).json({message: "Unable to remove book from collection"})
