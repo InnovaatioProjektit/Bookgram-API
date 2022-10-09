@@ -7,13 +7,13 @@ import pool from './../../../utils/db.js'
  */
 
 /**
- * Luo uusi kirjakokoelma
- * @param {object} userData käyttätiedot (id, kokoelman nimi)
+ * Luo uusi kirjakokoelma käyttäjälle
+ * @param {object} userData käyttäjätiedot (id, kokoelman nimi)
  */
  export async function createCollection(data){
-    const {userID, collectionName} = data;
+    const {user, collectionName} = data;
 
-    return pool.query("INSERT INTO bookSchema.Collection (userID, cname) VALUES ($1, $2) RETURNING (id)", [userID, collectionName]).then(rawData => {
+    return pool.query("INSERT INTO bookSchema.Collection (userID, cname) VALUES ($1, $2) RETURNING (id)", [parseInt(user), collectionName]).then(rawData => {
         if(rawData.rowCount){
             return rawData.rows[0];
         }
@@ -22,17 +22,43 @@ import pool from './../../../utils/db.js'
     });
 }
 
+/**
+ * Luo uusi kirjakokoelma käyttäjälle
+ * @param {object} userData käyttäjätiedot (id, kokoelman nimi)
+ */
+ export async function removeCollection(data){
+    const {user, shelf} = data;
+
+    return pool.query("DELETE FROM bookSchema.Collection WHERE userID = $1 AND id = $2", [parseInt(user), parseInt(shelf)]).then(rawData => {
+        return rawData.rows;
+    });
+}
 
 
 /**
- * Lisää kirja kokoelmaan
- * @param {object} userData käyttätiedot (id, kokoelman nimi)
+ * Luo uusi kirjakokoelma käyttäjälle
+ * @param {object} userData käyttäjätiedot (id, kokoelman nimi)
  */
- export async function createBook(data){
+ export async function clearCollection(data){
+    const {user, shelf} = data;
 
-    const {user, tag} = data;
+    return pool.query("DELETE FROM bookSchema.Book WHERE collectionID = $1", [parseInt(shelf)]).then(rawData => {
+        return rawData.rows;
+    });
+}
 
-    return pool.query("INSERT INTO bookSchema.Book (tag, userID) VALUES ($1, $2) RETURNING (id)", [tag, parseInt(user)]).then(rawData => {
+
+
+/**
+ * Lisää kirja kokoelmaan (joka on automaattisesti jonkun käyttäjän omistama)'
+ * 
+ * @param {object} kirjan id, kokoelman id
+ */
+ export async function addBookToCollection(data){
+
+    const {shelf, tag} = data;
+
+    return pool.query("INSERT INTO bookSchema.Book (tag, booktag) VALUES ($1, $2) RETURNING (id)", [tag, parseInt(shelf)]).then(rawData => {
         if(rawData.rowCount){
             return rawData.rows[0];
         }
@@ -43,27 +69,39 @@ import pool from './../../../utils/db.js'
 
 /**
  * Poista kirja käyttäjän kokoelmasta
- * @param {object} userData käyttätiedot (id, kokoelman nimi)
+ * @param {object} (kirjan id, kokoelman id)
  */
- export async function removeBook(data){
+ export async function removeBookFromCollection(data){
 
-    const {user, tag} = data;
+    const {shelf, tag} = data;
 
-    return pool.query("DELETE FROM bookSchema.Book WHERE bookSchema.Book.tag = $1 AND bookSchema.Book.userID = $2", [tag, parseInt(user)]).then(rawData => {
+    return pool.query("DELETE FROM bookSchema.Book WHERE bookSchema.booktag = $1 AND bookSchema.Book.collectionID = $2", [tag, parseInt(shelf)]).then(rawData => {
         return rawData.rowCount
     });
 }
 
+/**
+ * hae kokoelman like-määrät
+ * @param {object} kokoelman tunniste
+ */
+ export async function getCollectionFavourited(collectionID){
+
+    return pool.query("SELECT favourited FROM bookSchema.Collection WHERE id = $1", [parseInt(collectionID)]).then(rawData => {
+        if(rawData.rowCount){
+            return rawData.rows[0];
+        }
+
+        return null;
+    });
+}
 
 /**
- * Luo kirjan arvostelu
- * @param {object} userData käyttätiedot (user, book, score)
+ * päivitä kokoelman tykkäykset määrällä
+ * @param {object} kokoelman tunniste
  */
- export async function createReview(data){
+ export async function updateCollectionFavourited(collectionID, count){
 
-    const {user, book, score} = data;
-
-    return pool.query("INSERT INTO bookSchema.Review (userID, bookID, score) VALUES ($1, $2, $3) RETURNING (id)", [parseInt(user), parseInt(book), parseInt(score)]).then(rawData => {
+    return pool.query("UPDATE bookSchema.Collection SET favourited = favourited + $1 WHERE id = $2", [parseInt(count), parseInt(collectionID)]).then(rawData => {
         if(rawData.rowCount){
             return rawData.rows[0];
         }
@@ -74,17 +112,34 @@ import pool from './../../../utils/db.js'
 
 
 /**
- * Hae kirja tägillä
+ * Hae kokoelmista kirjan tunnisteen avulla. Palauttaa kokoelmien tunnisteet joihin se kuuluu
  * 
  * @param {object} kirjan tunniste (tag)
  */
- export async function getBook(data){
+ export async function getCollectionsByUser(user){
+
+    return pool.query("SELECT id, cname, favorited FROM bookSchema.Collection WHERE userID = $1", [user]).then(rawData => {
+        if(rawData.rowCount){
+            return rawData.rows;
+        }
+
+        return null;
+    });
+}
+
+
+/**
+ * Hae kokoelmista kirjan tunnisteen avulla. Palauttaa kokoelmien tunnisteet joihin se kuuluu
+ * 
+ * @param {object} kirjan tunniste (tag)
+ */
+ export async function getCollectionsByBook(data){
 
     const { tag } = data;
 
-    return pool.query("SELECT * FROM bookSchema.Book WHERE bookSchema.Book.tag = $1", [tag]).then(rawData => {
+    return pool.query("SELECT collectionID FROM bookSchema.Book WHERE bookSchema.Book.booktag = $1", [tag]).then(rawData => {
         if(rawData.rowCount){
-            return rawData.rows[0];
+            return rawData.rows;
         }
 
         return null;
@@ -106,13 +161,29 @@ import pool from './../../../utils/db.js'
     });
 }
 
+
 /**
- * Hae kokoelma kaikki kirjat
+ * Hae kokoelma käyttäjän id:llä
+ * @param {object} käyttäjän id, kokoelman id
+ */
+ export async function getCollectionByUser(userID, id){
+
+    return pool.query("SELECT * FROM bookSchema.Collection WHERE id = $1 and userID = $2", [parseInt(id), parseInt(userID)]).then(rawData => {
+        if(rawData.rowCount){
+            return rawData.rows[0];
+        }
+
+        return null;
+    });
+}
+
+/**
+ * Hae kokoelman kaikki kirjat. Palauttaa kirjojen tunnisteet
  * @param {object} kokoelman id
  */
- export async function getBooksByCollection(id){
+ export async function getBooksByCollectionID(collectionID){
 
-    return pool.query("SELECT * FROM bookSchema.Book WHERE userID = $1", [parseInt(id)]).then(rawData => {
+    return pool.query("SELECT booktag FROM bookSchema.Book WHERE collectionID = $1", [parseInt(collectionID)]).then(rawData => {
         if(rawData.rowCount){
             return rawData.rows;
         }
@@ -127,9 +198,9 @@ import pool from './../../../utils/db.js'
  */
  export async function getReviewsByID(id){
 
-    return pool.query("SELECT * FROM bookSchema.Review WHERE userID = $1", [parseInt(id)]).then(rawData => {
+    return pool.query("SELECT id, comment FROM bookSchema.Review WHERE userID = $1", [parseInt(id)]).then(rawData => {
         if(rawData.rowCount){
-            return rawData.rows[0];
+            return rawData.rows;
         }
 
         return null;
