@@ -1,5 +1,14 @@
 import { validationResult } from 'express-validator';
-import { getBooksByCollection, getCollectionByID, getBook, createBook, removeBook } from './model/book.js'
+import { 
+   createCollection, 
+   removeCollection, 
+   clearCollection,
+   getBooksByCollection, 
+   getCollectionByID, 
+   getCollectionsByUser,
+   getBook, 
+   addBookToCollection, 
+   removeBookFromCollection } from './model/book.js'
 
 /** 
  * Hae kirjakokoelman kaikki kirjat
@@ -32,19 +41,35 @@ import { getBooksByCollection, getCollectionByID, getBook, createBook, removeBoo
 
 
 /** 
+ * Hae käyttäjän kaikki kokoelmat
+ * 
+ * @name books get
+ * @route {GET}  /books/collections
+ */
+ export async function collections(request, response){
+   if(request.id){
+       const success = await getCollectionsByUser(request.id)
+
+       return response.status(200).json({rows: success, message: "OK"})
+    }
+
+    return response.status(401).json({message: "Invalid User"})
+}
+
+
+/** 
  * Hae kirjakokoelma id:llä
  * 
  * @name books get
  * @route {GET} /api/books/collections/:id
  */
-export async function collections(request, response){
+export async function collectionByID(request, response){
     if(request.params.id){
         const success = await getCollectionByID(request.params.id)
         return response.status(200).json({rows: success, message: "OK"})
      }
  
      return response.status(401).json({message: "Invalid Collection"})
-
 }
 
 /** 
@@ -71,7 +96,7 @@ export async function collections(request, response){
  * Lisää kirja käyttäjän kokoelmaan
  * 
  * @name books post
- * @route {POST} /api/books/volume
+ * @route {POST} @route /api/books/collections/:shelf/addBook
  */
  export async function addVolume(request, response){
    const err = validationResult(request);
@@ -84,12 +109,13 @@ export async function collections(request, response){
    }
 
    try{
-      const id = await createBook({
+      const id = await addBookToCollection({
          user: request.body.user,
-         tag: request.body.tag
+         tag: request.body.tag,
+         shelf: request.params.shelf
       })
 
-      console.log(`A user ${request.body.user} added a book '${request.body.tag}' to their collection`)
+      console.log(`A user ${request.body.user} added a book '${request.body.tag}' to collection '${request.params.shelf}'`)
    
       return await response.status(200).json({rows: id, message:"Book added to user collection"})
 
@@ -100,12 +126,11 @@ export async function collections(request, response){
 }
 
 
-
 /** 
  * Poista kirja käyttäjän kokoelmasta
  * 
  * @name books delete
- * @route {DELETE} /api/books/volume
+ * @route {DELETE} /api/books/collections/:shelf/removeBook
  */
  export async function removeVolume(request, response){
    const err = validationResult(request);
@@ -118,15 +143,108 @@ export async function collections(request, response){
    }
 
 
-   const rows = await removeBook({
-      user: request.body.user,
+   const rows = await removeBookFromCollection({
+      shelf: request.params.shelf,
       tag: request.body.tag
    })
 
    if(rows >= 1){
-      console.log(`A user ${request.body.user} removed a book ${request.body.tag} from their collection`)
+      console.log(`A user ${request.body.user} removed a book ${request.body.tag} from their collection '${request.params.shelf}'`)
       return response.status(200).json({rows: rows, message:"Book removed from user collection"})
    }
 
    return response.status(401).json({message: "Unable to remove book from collection"})
 }
+
+
+/** 
+ * Luo uusi kokoelma käyttäjälle
+ * 
+ * @name books post
+ * @route {POST} /api/books/collections/createCollection
+ */
+ export async function createUserCollection(request, response){
+   const err = validationResult(request);
+   if(!err.isEmpty()){
+       return response.status(400).json({
+           method: request.method,
+           status: response.statusCode,
+           errors: err.array()
+       })
+   }
+
+   const id = await createCollection({
+      user: request.body.user,
+      collectionName: request.body.collectionName
+   })
+
+   if(id != null){
+      console.log(`A user ${request.body.user} created a new collection'`)
+      return response.status(200).json({rows: id, message:"A new collection was added to user collections"})
+   }
+
+   return response.status(401).json({message: "Unable to create a collection"})
+
+ }
+
+
+ 
+/** 
+ * Poista käytäjän kokoelma
+ * 
+ * @name books post
+ * @route {DELETE} /api/books/collections/removeCollection
+ */
+ export async function removeUserCollection(request, response){
+   const err = validationResult(request);
+   if(!err.isEmpty()){
+       return response.status(400).json({
+           method: request.method,
+           status: response.statusCode,
+           errors: err.array()
+       })
+   }
+
+   const id = await removeCollection({
+      user: request.body.user,
+      shelf: request.body.shelf
+   })
+
+   if(id != null){
+      console.log(`A user ${request.body.user} removed a collection '${request.params.shelf}'`)
+      return response.status(200).json({rows: id, message:"The collection was removed"})
+   }
+
+   return response.status(401).json({message: "Unable to remove the collection"})
+
+ }
+
+
+
+ /**
+  * Tyhjennä käyttäjän kokoelma
+  * @name books post
+  * @route {POST} @route /api/books/collections/clearCollection
+  */
+  export async function clearUserCollection(request, response){
+   const err = validationResult(request);
+   if(!err.isEmpty()){
+       return response.status(400).json({
+           method: request.method,
+           status: response.statusCode,
+           errors: err.array()
+       })
+   }
+
+   const data = await clearCollection({
+      user: request.body.user,
+      shelf: request.body.shelf
+   })
+
+   if(data){
+      return response.status(200).json({rows: data, message:"The collection was cleared"})
+   }
+
+   return response.status(401).json({message: "Unable to clear the collection"})
+
+  }

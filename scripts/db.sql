@@ -6,9 +6,9 @@ CREATE SCHEMA IF NOT EXISTS bookSchema;
 
 CREATE TABLE IF NOT EXISTS userSchema.User(
     id SERIAL NOT NULL,
-    username VARCHAR(45) NOT NULL,
+    username VARCHAR(45) NOT NULL UNIQUE,
     passwd VARCHAR(128) NOT NULL,
-    name VARCHAR(25),
+    fullname VARCHAR(25),
     lastname VARCHAR(25),
 
     PRIMARY KEY (id)
@@ -27,24 +27,35 @@ CREATE TABLE IF NOT EXISTS userSchema.Session(
 CREATE TABLE IF NOT EXISTS bookSchema.Review(
     id SERIAL NOT NULL,
     userID INT NOT NULL,
-    bookID INT NOT NULL,
-    score INT NOT NULL,
+    booktag INT NOT NULL,
+    comment VARCHAR(280),
 
+    PRIMARY KEY(id),
     FOREIGN KEY(userID) REFERENCES userSchema.User(id),
-    FOREIGN KEY(bookID) REFERENCES bookSchema.Book(id),
 
-    CONSTRAINT Book_review UNIQUE (userID, bookID)
+    CONSTRAINT NoDuplicateReview UNIQUE (userID, booktag)
 );
+
 
 CREATE TABLE IF NOT EXISTS bookSchema.Book(
-    id SERIAL NOT NULL,
-    tag VARCHAR(32) NOT NULL,
-    userID INT NOT NULL,
+    booktag INT NOT NULL,
+    collectionID INT NOT NULL,
 
-    PRIMARY KEY (id),
-    FOREIGN KEY (userID) REFERENCES userSchema.User(id)
+    PRIMARY KEY (booktag, collectionID)
+    FOREIGN KEY (collectionID) REFERENCES bookSchema.Collection(id) ON DELETE CASCADE,
 
-    CONSTRAINT Book_volume UNIQUE (userID, tag)
+    CONSTRAINT NoDuplicatesCollection UNIQUE(bookID, collectionID)
 );
 
 
+
+CREATE TABLE IF NOT EXISTS bookSchema.Collection(
+    id SERIAL NOT NULL,
+    cname VARCHAR(50),
+    userID INT NOT NULL,
+    favourited INT NOT NULL DEFAULT 1 CHECK(favourited > 0)
+
+
+    PRIMARY KEY(id),
+    FOREIGN KEY (userID) REFERENCES userSchema.User(id),
+);
