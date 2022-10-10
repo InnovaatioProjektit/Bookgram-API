@@ -8,7 +8,10 @@ import {
    getCollectionsByUser,
    getBook, 
    addBookToCollection, 
-   removeBookFromCollection } from './model/book.js'
+   removeBookFromCollection, 
+   getCollectionsByBook,
+   getCollectionFavourited,
+   updateCollectionFavourited} from './model/book.js'
 
 /** 
  * Hae kirjakokoelman kaikki kirjat
@@ -27,7 +30,7 @@ import {
    }
 
    if(request.params.id){
-      const success = await getBooksByCollection(request.params.id)
+      const success = await getBooksByCollection(request.params.shelf)
 
       if(success){
          return response.status(200).json({rows: success, message: "OK"})
@@ -75,6 +78,8 @@ export async function collectionByID(request, response){
 /** 
  * Hae kirja tag:llä
  * 
+ * TODO
+ * 
  * @name books get
  * @route {GET} /api/books/volume/:tag
  */
@@ -96,7 +101,7 @@ export async function collectionByID(request, response){
  * Lisää kirja käyttäjän kokoelmaan
  * 
  * @name books post
- * @route {POST} @route /api/books/collections/:shelf/addBook
+ * @route {POST} /api/books/collections/:shelf/addBook
  */
  export async function addVolume(request, response){
    const err = validationResult(request);
@@ -192,7 +197,7 @@ export async function collectionByID(request, response){
 /** 
  * Poista käytäjän kokoelma
  * 
- * @name books post
+ * @name books delete
  * @route {DELETE} /api/books/collections/removeCollection
  */
  export async function removeUserCollection(request, response){
@@ -224,7 +229,7 @@ export async function collectionByID(request, response){
  /**
   * Tyhjennä käyttäjän kokoelma
   * @name books post
-  * @route {POST} @route /api/books/collections/clearCollection
+  * @route {POST} /api/books/collections/clearCollection
   */
   export async function clearUserCollection(request, response){
    const err = validationResult(request);
@@ -242,9 +247,91 @@ export async function collectionByID(request, response){
    })
 
    if(data){
-      return response.status(200).json({rows: data, message:"The collection was cleared"})
+      return response.status(200).json({rows: data, message: "The collection was cleared"})
    }
 
    return response.status(401).json({message: "Unable to clear the collection"})
 
   }
+
+
+  /**
+   * Hae kaikki kokoelmat, jossa haettava kirja sijaitsee
+   * @name books get
+   * @route {GET} /books/collections/book/:tag
+   */
+   export async function collectionsByBook(request, response){
+      const err = validationResult(request);
+      if(!err.isEmpty()){
+         return response.status(400).json({
+            method: request.method,
+            status: response.statusCode,
+            errors: err.array()
+         })
+      }
+
+      const success = await getCollectionsByBook(request.params.tag);
+
+      if(success){
+         return response.status(200).json({rows: rows, message: "OK"})
+      }
+
+
+      return response.status(401).json({message: "Unable fetch collections"})
+
+   }
+
+
+/** 
+ * Hae kokoelman tykkäykset
+ * 
+ * @name books get
+ * @route {GET} /books/collections/:shelf/likes
+ */
+ export async function collectionLikes(request, response){
+   const err = validationResult(request);
+   if(!err.isEmpty()){
+       return response.status(400).json({
+           method: request.method,
+           status: response.statusCode,
+           errors: err.array()
+       })
+   }
+
+   const likes = await getCollectionFavourited(request.params.shelf)
+
+   if(likes != null){
+      return response.status(200).json({rows: likes, message:"OK"})
+   }
+
+   return response.status(401).json({message: "Unable to get likes from collection"})
+
+ }
+
+
+
+ /** 
+ * Lisää tykkäys kokoelmalle
+ * 
+ * @name books post
+ * @route {POST} /books/collections/:shelf/likes
+ */
+  export async function collectionLikesAdd(request, response){
+   const err = validationResult(request);
+   if(!err.isEmpty()){
+       return response.status(400).json({
+           method: request.method,
+           status: response.statusCode,
+           errors: err.array()
+       })
+   }
+
+   const success = await updateCollectionFavourited(request.params.shelf, request.body.count)
+
+   if(success != null){
+      return response.status(200).json({rows: success, message:"OK"})
+   }
+
+   return response.status(401).json({message: "Unable to add likes from collection"})
+
+ }

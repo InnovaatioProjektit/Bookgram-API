@@ -28,6 +28,20 @@ import pool from './../../../utils/db.js'
 
 
 /**
+ * Poista kirja kokoelmasta
+ * @param {object} userData tiedot (user id, book tag)
+ */
+ export async function deleteReview(data){
+
+    const {user, book} = data;
+
+    return pool.query("DELETE FROM userSchema.Review WHERE userID = $1 AND booktag = $2", [parseInt(user), parseInt(book)]).then(rawData => {
+        return rawData.rowCount;
+    });
+}
+
+
+/**
  * Hae kaikki kirjan arvostelut
  * @param {object} kirjan tunniste
  */
@@ -46,11 +60,27 @@ import pool from './../../../utils/db.js'
  * Hae käyttäjän kaikki arvostelut
  * @param {object} käyttäjän id
  */
- export async function getReviewsByID(id){
+ export async function getReviewsByUser(id){
 
-    return pool.query("SELECT id, comment FROM bookSchema.Review WHERE userID = $1", [parseInt(id)]).then(rawData => {
+    return pool.query("SELECT id, booktag, comment FROM bookSchema.Review WHERE userID = $1", [parseInt(id)]).then(rawData => {
         if(rawData.rowCount){
             return rawData.rows;
+        }
+
+        return null;
+    });
+}
+
+
+/**
+ * Hae yksittäinen kommentti
+ * @param {object} kommentin id
+ */
+ export async function getReview(id){
+
+    return pool.query("SELECT * FROM bookSchema.Review WHERE userID = $1", [parseInt(id)]).then(rawData => {
+        if(rawData.rowCount){
+            return rawData.rows[0];
         }
 
         return null;

@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS bookSchema.Review(
 CREATE TABLE IF NOT EXISTS bookSchema.Book(
     booktag INT NOT NULL,
     collectionID INT NOT NULL,
+    starred BOOLEAN NOT NULL DEFAULT FALSE,
 
     PRIMARY KEY (booktag, collectionID)
     FOREIGN KEY (collectionID) REFERENCES bookSchema.Collection(id) ON DELETE CASCADE,

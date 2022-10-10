@@ -96,7 +96,7 @@ import pool from './../../../utils/db.js'
 }
 
 /**
- * päivitä kokoelman tykkäykset määrällä
+ * Päivitä kokoelman tykkäykset määrällä
  * @param {object} kokoelman tunniste
  */
  export async function updateCollectionFavourited(collectionID, count){
@@ -133,11 +133,9 @@ import pool from './../../../utils/db.js'
  * 
  * @param {object} kirjan tunniste (tag)
  */
- export async function getCollectionsByBook(data){
+ export async function getCollectionsByBook(tag){
 
-    const { tag } = data;
-
-    return pool.query("SELECT collectionID FROM bookSchema.Book WHERE bookSchema.Book.booktag = $1", [tag]).then(rawData => {
+    return pool.query("SELECT starred, collectionID FROM bookSchema.Book WHERE bookSchema.Book.booktag = $1", [tag]).then(rawData => {
         if(rawData.rowCount){
             return rawData.rows;
         }
@@ -181,24 +179,9 @@ import pool from './../../../utils/db.js'
  * Hae kokoelman kaikki kirjat. Palauttaa kirjojen tunnisteet
  * @param {object} kokoelman id
  */
- export async function getBooksByCollectionID(collectionID){
+ export async function getBooksByCollection(collectionID){
 
-    return pool.query("SELECT booktag FROM bookSchema.Book WHERE collectionID = $1", [parseInt(collectionID)]).then(rawData => {
-        if(rawData.rowCount){
-            return rawData.rows;
-        }
-
-        return null;
-    });
-}
-
-/**
- * Hae käyttäjän kaikki arvostelut
- * @param {object} käyttäjän id
- */
- export async function getReviewsByID(id){
-
-    return pool.query("SELECT id, comment FROM bookSchema.Review WHERE userID = $1", [parseInt(id)]).then(rawData => {
+    return pool.query("SELECT booktag, starred FROM bookSchema.Book WHERE collectionID = $1", [parseInt(collectionID)]).then(rawData => {
         if(rawData.rowCount){
             return rawData.rows;
         }
