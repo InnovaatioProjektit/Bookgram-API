@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { body, param, validationResult } from 'express-validator';
 import { authentication } from '../../auth/pwd.js';
 
-import reviews, { deleteReview, getReview, getReviewsByBook, getReviewsByUser } from './model/review.js';
+import { deleteReview, getReview, getReviewsByBook, getReviewsByUser } from './model/review.js';
 
 /**
  * Arvostelujen hallinta

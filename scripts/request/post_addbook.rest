@@ -1,0 +1,7 @@
+POST https://secure-wildwood-93525.herokuapp.com/api/login HTTP/1.1
+content-type: application/json
+
+{
+    "email": "admin",
+    "password": "admina"
+}

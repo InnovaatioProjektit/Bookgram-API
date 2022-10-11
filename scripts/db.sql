@@ -37,26 +37,26 @@ CREATE TABLE IF NOT EXISTS bookSchema.Review(
 );
 
 
-CREATE TABLE IF NOT EXISTS bookSchema.Book(
-    booktag INT NOT NULL,
-    collectionID INT NOT NULL,
-    starred BOOLEAN NOT NULL DEFAULT FALSE,
-
-    PRIMARY KEY (booktag, collectionID)
-    FOREIGN KEY (collectionID) REFERENCES bookSchema.Collection(id) ON DELETE CASCADE,
-
-    CONSTRAINT NoDuplicatesCollection UNIQUE(bookID, collectionID)
-);
-
-
 
 CREATE TABLE IF NOT EXISTS bookSchema.Collection(
     id SERIAL NOT NULL,
     cname VARCHAR(50),
     userID INT NOT NULL,
-    favourited INT NOT NULL DEFAULT 1 CHECK(favourited > 0)
+    favourited INT NOT NULL DEFAULT 1 CHECK(favourited > 0),
 
 
     PRIMARY KEY(id),
-    FOREIGN KEY (userID) REFERENCES userSchema.User(id),
+    FOREIGN KEY (userID) REFERENCES userSchema.User(id)
+);
+
+
+CREATE TABLE IF NOT EXISTS bookSchema.Book(
+    booktag INT NOT NULL,
+    collectionID INT NOT NULL,
+    starred BOOLEAN NOT NULL DEFAULT FALSE,
+
+    PRIMARY KEY (booktag, collectionID),
+    FOREIGN KEY (collectionID) REFERENCES bookSchema.Collection(id) ON DELETE CASCADE,
+
+    CONSTRAINT NoDuplicatesCollection UNIQUE(booktag, collectionID)
 );

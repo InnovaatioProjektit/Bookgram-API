@@ -6,12 +6,12 @@ import {
    getBooksByCollection, 
    getCollectionByID, 
    getCollectionsByUser,
-   getBook, 
    addBookToCollection, 
    removeBookFromCollection, 
    getCollectionsByBook,
    getCollectionFavourited,
-   updateCollectionFavourited} from './model/book.js'
+   updateCollectionFavourited, 
+   updateBookStarred} from './model/book.js'
 
 /** 
  * Hae kirjakokoelman kaikki kirjat
@@ -67,7 +67,7 @@ import {
  * @route {GET} /api/books/collections/:id
  */
 export async function collectionByID(request, response){
-    if(request.params.id){
+    if(request.params.id || request.id){
         const success = await getCollectionByID(request.params.id)
         return response.status(200).json({rows: success, message: "OK"})
      }
@@ -335,3 +335,30 @@ export async function collectionByID(request, response){
    return response.status(401).json({message: "Unable to add likes from collection"})
 
  }
+
+
+/** 
+ * Lisää tykkäys kirjalle
+ * 
+ * @name books post
+ * @route {POST} /books/collections/:shelf/starred
+ */
+export async function setBookStarred(request, response){
+   const err = validationResult(request);
+   if(!err.isEmpty()){
+         return response.status(400).json({
+            method: request.method,
+            status: response.statusCode,
+            errors: err.array()
+         })
+   }
+
+   const success = await updateBookStarred(request.body.booktag, request.body.count)
+
+   if(success != null){
+      return response.status(200).json({rows: success, message:"OK"})
+   }
+
+   return response.status(401).json({message: "Unable to add likes from collection"})
+
+}

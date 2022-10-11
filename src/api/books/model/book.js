@@ -102,11 +102,19 @@ import pool from './../../../utils/db.js'
  export async function updateCollectionFavourited(collectionID, count){
 
     return pool.query("UPDATE bookSchema.Collection SET favourited = favourited + $1 WHERE id = $2", [parseInt(count), parseInt(collectionID)]).then(rawData => {
-        if(rawData.rowCount){
-            return rawData.rows[0];
-        }
+        return rawData.rowCount
+    });
+}
 
-        return null;
+
+/**
+ * Päivitä kirjan tykkäykset  määrällä
+ * @param {object} kokoelman tunniste, boolean
+ */
+ export async function updateBookStarred(collectionID, booktag, starred){
+
+    return pool.query("UPDATE bookSchema.Book SET starred = $1 WHERE collectionID = $2 AND booktag = $2", [starred, parseInt(collectionID), parseInt(booktag)]).then(rawData => {
+        return rawData.rowCount
     });
 }
 
