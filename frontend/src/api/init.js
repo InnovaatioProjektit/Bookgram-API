@@ -2,7 +2,7 @@ import axios from 'axios'
 import {storeToken, getValidToken} from './token'
 
 
-const baseURL = 'http://10.114.32.29:3001'
+const baseURL = 'http://10.114.32.8:3001'
 const api = axios.create({ baseURL })
 
 /**

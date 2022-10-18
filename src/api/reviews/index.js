@@ -1,8 +1,9 @@
 import { Router } from 'express'
-import { body, param, validationResult } from 'express-validator';
+import { body, param } from 'express-validator';
 import { authentication } from '../../auth/pwd.js';
+import ValidationResponse from '../../utils/ValidationResponse.js';
 
-import { deleteReview, getReview, getReviewsByBook, getReviewsByUser } from './model/review.js';
+import { createReview, deleteReview, getReview, getReviewsByBook, getReviewsByUser, getReviewUnique } from './model/review.js';
 
 /**
  * Arvostelujen hallinta
@@ -13,26 +14,6 @@ import { deleteReview, getReview, getReviewsByBook, getReviewsByUser } from './m
  */
 
  const router = Router();
-
- /**
-  * Palauttaa virhekutsun. Jos kutsussa oli virheitä, palautetaan virheellinen kutsu, muuten
-  * funktio palauttaa null, kun kutsu on virheetön.
-  * @param {*} request 
-  * @param {*} response 
-  * @returns errResponse
-  */
- function ValidationResponse(request, response){
-    const err = validationResult(request);
-    if(!err.isEmpty()){
-        return response.status(400).json({
-            method: request.method,
-            status: response.statusCode,
-            errors: err.array()
-        })
-    }
-
-    return null
- }
 
 /** Hae yksittäinen kommentti
 * @route {GET} /reviews/:id
@@ -59,14 +40,20 @@ router.get("/:id", param("id").not().isEmpty().isInt(), authentication, async (r
  */
 router.post("/book/:tag", 
     body("comment").isLength({min: 5, max: 280}).withMessage('Comment  must be between 5 and 280 characters long').matches(/^[A-Za-z0-9 .,'!&]+$/).withMessage('Invalid string literal was used'),
-    param("tag").not().isEmpty().isInt(), 
+    param("tag").not().isEmpty().isString(), 
     authentication, async (request, response) => {
         const errResponse = ValidationResponse(request, response)
         if(errResponse != null){
             return errResponse
         }
 
-        const success = await getReview({
+        const duplicate = await getReviewUnique(request.id, request.params.tag)
+
+        if(duplicate){
+            return response.status(401).json({message: "A user comment already exists"})
+        }
+
+        const success = await createReview({
             user: request.id,
             book: request.params.tag,
             comment: request.body.comment
@@ -85,7 +72,7 @@ router.post("/book/:tag",
  * Poista käyttäjän kommentti kirjalle
  * @route {DELETE} reviews/book/:tag
  */
-router.delete("/book/:tag",  param("tag").not().isEmpty().isInt(), authentication, async (request, response) => {
+router.delete("/book/:tag",  param("tag").not().isEmpty().isString(), authentication, async (request, response) => {
     const errResponse = ValidationResponse(request, response)
     if(errResponse != null){
         return errResponse
@@ -108,7 +95,7 @@ router.delete("/book/:tag",  param("tag").not().isEmpty().isInt(), authenticatio
  * Muokkaa käyttäjän kommentti kirjalle
  * @route {UPDATE} reviews/book/:tag
  */
-router.update("/book/:tag", param("tag").not().isEmpty().isInt(), authentication, async (request, response) => {
+router.put("/book/:tag", param("tag").not().isEmpty().isString(), authentication, async (request, response) => {
     const errResponse = ValidationResponse(request, response)
     if(errResponse != null){
         return errResponse
@@ -123,7 +110,7 @@ router.update("/book/:tag", param("tag").not().isEmpty().isInt(), authentication
  * Hae kaikki kirjan kommentit
  * @route {GET} reviews/book/:tag
  */
-router.get("/book/:tag", param("tag").not().isEmpty().isInt(), authentication, async (request, response) => {
+router.get("/book/:tag", param("tag").not().isEmpty().isString(), authentication, async (request, response) => {
     const errResponse = ValidationResponse(request, response)
     if(errResponse != null){
         return errResponse
@@ -135,7 +122,7 @@ router.get("/book/:tag", param("tag").not().isEmpty().isInt(), authentication, a
         return response.status(200).json({rows: rows, message:"OK"})
     }
 
-    return response.status(401).json({message: "Unable to fetch comments"})
+    return response.status(401).json({message: "Nothing to fetch"})
 
 })
 
@@ -156,7 +143,7 @@ router.get("/book/:tag", param("tag").not().isEmpty().isInt(), authentication, a
         return response.status(200).json({rows: rows, message:"OK"})
     }
 
-    return response.status(401).json({message: "Unable to fetch comments"})
+    return response.status(401).json({message: "Nothing to fetch"})
 
  })
 

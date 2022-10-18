@@ -35,10 +35,9 @@ export default function Login(){
 
         const credentials = {
             username: data.get('email'),
-            password: data.get('password')
+            password: data.get('password'),
+            remember: event.currentTarget[4].checked
         }
-
-        console.log(credentials);
 
         const [stat, token] = await login(credentials)
         setSuccess(!stat)
@@ -106,8 +105,8 @@ export default function Login(){
               autoComplete="current-password"
             />
             <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember, you are here forever"
+              control={<Checkbox id="remember" value="remember" color="primary" />}
+              label="Remember Me"
             />
             <InfoPanel sx={{ mb: 1, mt: 1}} />
             <Button

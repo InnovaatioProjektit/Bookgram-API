@@ -24,9 +24,10 @@ import MuiAlert from '@mui/material/Alert';
   });
 
 export default (props) => {
-    const [open, setOpen] = React.useState(true);
+    const [open, setOpen] = React.useState(false);
+    const {message, severity, vertical, horizontal, buoy} = props;
 
-    const {message, severity, vertical, horizontal} = props;
+    buoy(setOpen)
 
     return (
         <Fragment>

@@ -3,6 +3,7 @@ import {} from 'dotenv/config'
 import { create } from './model/user.js'
 import {hash} from '../../auth/pwd.js'
 import { validationResult } from 'express-validator';
+import { createCollection } from '../books/model/book.js';
 
 
 
@@ -29,10 +30,18 @@ export default (async (request, response, next) => {
     const user = await create({
         username: request.body.username,
         password: hashedPassword,
+        fullname: request.body.fullname,
+        lastname: request.body.lastname
     })
 
     if(user){
         console.log("registered a new user: ", user)
+        
+        const collection = await createCollection({
+            user: user.id,
+            collectionName: "My Favourites"
+        })
+
         return response.status(200).send({message: 'User was created successfully', id: user})
     }
 })

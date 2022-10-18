@@ -58,11 +58,20 @@ app.listen(options.port, options.host, () => {
 
 
 process.on('uncaughtException', err => {
+  pool.end()
   console.error('There was an uncaught error', err)
   process.exit(1) //mandatory (as per the Node.js docs)
 })
 
 process.on("STOP", function(){
+  pool.end()
   console.log("Exiting server");
   app.close();
 })
+
+process.on('SIGINT', function() {
+  pool.end()
+  app.close();
+  console.log( "\nGracefully shutting down from SIGINT (Ctrl-C)" );
+  process.exit(0);
+});

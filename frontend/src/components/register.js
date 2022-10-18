@@ -27,7 +27,7 @@ export default function Register(){
         const data = new FormData(event.currentTarget);
 
         const credentials = {
-            name: data.get('name'),
+            fullname: data.get('name'),
             lastname: data.get('lastname'),
             username: data.get('email'),
             password: data.get('lpassword')
@@ -91,7 +91,7 @@ export default function Register(){
 
     return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
+      <Container component="main" maxWidth="sm">
         <CssBaseline />
         <Box
           sx={{
@@ -102,8 +102,11 @@ export default function Register(){
           }}
         >
           
-          <Typography component="h1" variant="h5">
-            Registration
+          <Typography component="h1" variant="h4">
+          Join a community of readers
+          </Typography>
+          <Typography>
+          <p>track your reading progess and browse community collections</p>
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 3 }}>
               <Grid container spacing={2}>

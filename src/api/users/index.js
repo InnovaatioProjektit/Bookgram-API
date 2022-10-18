@@ -1,12 +1,13 @@
 import { Router } from 'express'
 import { body, param, validationResult } from 'express-validator';
-import {findUserByName} from '../users/model/user.js'
+import {findUserById, findUserByName} from '../users/model/user.js'
 
 import { authentication } from '../../auth/pwd.js';
 
 import login from './login.js'
 import logout from './logout.js'
 import register from './register.js'
+import ValidationResponse from '../../utils/ValidationResponse.js';
 
 /**
  * Kayttajahallinta, kuten kirjautuminen ja rekisterointi
@@ -18,23 +19,52 @@ import register from './register.js'
 
 const router = Router();
 
+/**
+ * Test protocol
+ */
+router.get("/test", (request, response) => {
+    return response.status(200).json({"message": "test complete" })
+})
 
 /**
  * Käyttäjän sisäänkirjautuminen. Salasanan pitää olla vähintään 4 kirjaimen pituinen
+ * @route {POST} /api/users/login
  */
 router.post("/login",
     body("username").not().isEmpty().trim(),
-    body("password").not().isEmpty().isLength({min: 4}).trim(),
-login)
+    body("password").not().isEmpty().isLength({min: 4, max: 128}).trim(),
+    body("remember").not().isEmpty().isBoolean(), 
+    login)
 
 /**
  * Uloskirjautuminen tuhoaa käyttäjän avaimen (token)
+ * @route {POST} api/users/logout
  */
 router.post("/logout", authentication, logout)
+
+/**
+ * Palauta käyttäjän yleistiedot, käyttäjätunnuksella
+ * @route {POST} /api/users/:userID
+ */
+router.post("/:userID", param("userID").not().isEmpty().isNumeric(), authentication, async (request, response) => {
+    const errResponse = ValidationResponse(request, response)
+    if(errResponse != null){
+        return errResponse
+    }
+
+    const row = await findUserById(request.params.userID)
+    if(row != null){
+        return response.status(200).json({rows: row, message: "OK"})
+    }
+
+    return response.status(401).json({message: "No userdata was found"})
+
+})
 
 
 /**
  * Luo uusi käyttäjätunnus. Salananan pitää olla vähintään 4 kirjaimen pituinen
+ * @route {POST} /api/users/adduser
  */
 router.post("/adduser", 
     body('username').not().isEmpty().trim().escape().custom(async value => {
@@ -43,6 +73,8 @@ router.post("/adduser",
             return Promise.reject('Käyttäjätunnus on jo olemassa.');
         }
     }),
-    body('password').trim().isLength({ min: 4 }), register)
+    body('password').trim().escape().isLength({min: 4, max: 128}), 
+    body('fullname').trim().escape().isLength({min: 2, max: 25}),
+    body('lastname').trim().escape().isLength({min: 2, max: 25}), register)
 
 export default router;

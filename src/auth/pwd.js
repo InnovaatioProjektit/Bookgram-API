@@ -11,9 +11,18 @@ export async function validateToken(hash, hashb){
     return await bcrypt.compare(hash, hashb);
 }
 
-export async function accessSession(user){
-    const expirationLifeTime = Date.now() + process.env.TOKEN_POLICY
-    const token = jwt.sign({id: user.id, user: user.username}, process.env.JWT_SECRET, {"expiresIn": "1h"})
+/**
+ * Luo Session JWT-token käyttäjälle, jolla voi pysyä kirjautuneena 1h verran.
+ * Kun rememberMe=true, sessio kestää max. 3 kuukautta
+ * 
+ * @param {*} user id
+ * @param {*} rememberMe boolean
+ * @returns session token
+ */
+export async function accessSession(user, rememberMe){
+    const expirationLifeTime = Date.now() + ((rememberMe ? 8640000 : parseInt(process.env.TOKEN_POLICY)) * 1000)
+    const expires = rememberMe ? {"expiresIn": 8640000} : {"expiresIn": "1h"}
+    const token = jwt.sign({id: user.id, user: user.username}, process.env.JWT_SECRET, expires)
     const userID = user.id
 
     const session = await global.db.query("INSERT INTO userSchema.Session (id, token, expires) VALUES ($1, $2, $3)", [userID, token, expirationLifeTime])
@@ -30,6 +39,8 @@ export async function getSession(token){
             return null;
     })
 }
+
+
 
 /**
  * Validoi, että käyttäjän avain on olemassa, se on tuore ja käyttäjänsä omistama JWT token.
@@ -93,7 +104,8 @@ export async function authentication(request, response, next){
     const header = request.header('authorization')
     const token = header && header.split(' ')[1]
     if(token == null){
-        return response.redirect('/login')
+        //return response.redirect('/api/users/login')
+        return response.status(403).send("login required")
     }
 
     const {message, valid, id} = await validateSession(token)

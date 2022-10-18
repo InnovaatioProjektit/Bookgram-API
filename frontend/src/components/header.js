@@ -45,9 +45,7 @@ export default function Header(props){
                     noWrap
                     sx={{ flex: 1}}
                     > {state.title} </Typography>
-                    <IconButton>
-                        <SearchIcon />
-                    </IconButton>
+                    
                     {!!token ? <LogoutButton/> : <RegisterButton/> }
             </Toolbar>
             <Toolbar 

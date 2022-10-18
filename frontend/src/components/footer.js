@@ -35,7 +35,7 @@ export default function Footer(props){
                     color="text.secondary"
                     component="p"
                     >
-                    Google Maps API © Google.com
+                    Google Books API © Google.com
                     </Typography>
                     <Copyright />
                 </Box>

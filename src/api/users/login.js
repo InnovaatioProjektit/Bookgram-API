@@ -19,13 +19,14 @@ export default (async (request, response ) => {
         }
 
     const user = await auth(request.body.username)
+    const rememberMe = request.body.remember || false;
 
     if(user){
         const verified = await validateToken(request.body.password, user.password)
 
         if(verified){
-            console.log("A user logged in: ", user.id, user.username)
-            return response.status(200).send({token: await accessSession(user), message: 'Login successful' })
+            console.log("A user logged in: ", user.id, user.username, "rememberMe:", rememberMe)
+            return response.status(200).send({token: await accessSession(user, rememberMe), message: 'Login successful' })
         }
     }
 

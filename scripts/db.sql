@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS userSchema.Session(
 CREATE TABLE IF NOT EXISTS bookSchema.Review(
     id SERIAL NOT NULL,
     userID INT NOT NULL,
-    booktag INT NOT NULL,
+    booktag VARCHAR(20) NOT NULL,
     comment VARCHAR(280),
 
     PRIMARY KEY(id),
@@ -40,18 +40,18 @@ CREATE TABLE IF NOT EXISTS bookSchema.Review(
 
 CREATE TABLE IF NOT EXISTS bookSchema.Collection(
     id SERIAL NOT NULL,
-    cname VARCHAR(50),
+    cname VARCHAR(30),
     userID INT NOT NULL,
     favourited INT NOT NULL DEFAULT 1 CHECK(favourited > 0),
 
 
     PRIMARY KEY(id),
-    FOREIGN KEY (userID) REFERENCES userSchema.User(id)
+    FOREIGN KEY (userID) REFERENCES userSchema.User(id) ON DELETE CASCADE
 );
 
 
 CREATE TABLE IF NOT EXISTS bookSchema.Book(
-    booktag INT NOT NULL,
+    booktag VARCHAR(20) NOT NULL,
     collectionID INT NOT NULL,
     starred BOOLEAN NOT NULL DEFAULT FALSE,
 

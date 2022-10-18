@@ -10,13 +10,16 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 
 
-import { getBooks, tagToBook, removeBook } from "../api/books";
+import { getBooks } from "../api/books";
 import BookCard from "./bookCard";
 
 import Toast from './Toast'
+import BookItem from "./bookItem";
+import { Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem } from "@mui/material";
+import { BookmarkIcon, BookIcon, BookmarkAddIcon, KeyboardArrowDown} from "@mui/icons-material"
 
 /**
- * Käyttäjän tekemät arvostelut
+ * Käyttäjän kirjakokoelmat
  * 
  * @param {*} props 
  * @returns 
@@ -24,44 +27,26 @@ import Toast from './Toast'
 function BookCollection(props) {
   const { state } = props;
   const { id } = state.useAuth()
-  const [volume, setVolume] = useState([])  // fill volume with book data from Google Books based on tag
-  const [refresh, setRefresh] = useState(false)
+  const [volumes, setVolumes] = useState([])  // fill volume with book data from Google Books based on tag
 
-  useEffect(() => {
-    (async function fetchBooks(){
-      const { data } = await getBooks(id)
-      if(data){
-        console.log(data)
-        //tagBooks(data)
-      }
-    }())
-    
-  }, [id])
+  // menun toiminta
+  const [selectedIndex, setSelectedIndex] = React.useState(1);
+  const [anchorMenu, setAnchorMenu] = React.useState(null);
+  const open = Boolean(anchorMenu)
 
+  const drawerWidth = 360;
 
-  useEffect(() => {
-    console.log(volume)
+  const handleMenuOpen = (event) => {
+    setAnchorMenu(event.currentTarget);
+  };
 
-  }, [volume])
+  const handleMenuClose = () => {
+    setAnchorMenu(null);
+  };
 
-
-
-  /**
-   * Täydennä kirjatiedot Google Books Apilla.
-   * @param {*} dat kirjantiedot tietokannasta
-   */
-  function tagBooks(dat){
-    dat.forEach(async (book) => {
-      const b = await tagToBook(book)
-      /**
-       * Refresh on tapa päivittää volume, ilman infinite looppia mitä muuten tapahtuisi useEffectisä.
-       */
-      setVolume((prev) => [...prev, {id: book.id, data: b.data} ])
-    })
-
-  }
-
-  
+  const handleListItemClick = (event, index) => {
+    setSelectedIndex(index);
+  };
 
   const theme = createTheme();
 
@@ -76,10 +61,10 @@ function BookCollection(props) {
               color="text.primary"
               gutterBottom
             >
-              My Collection
+              My Collections
             </Typography>
             <Typography variant="h5" align="center" color="text.secondary" paragraph>
-              This section contains all your favorite books in a single collection—You may 
+              This section contains all your favorite books in your curated collections—You may 
               add more books or remove any extras as you wish.
             </Typography>
             <Stack
@@ -92,16 +77,142 @@ function BookCollection(props) {
               <Button variant="outlined">Secondary action</Button>
             </Stack>
     </Container>
-    <Container sx={{ py: 8 }} maxWidth="md">
-    <Grid container spacing={4}>
-    {volume.map((card) => (
-      <Grid item key={card.id} xs={12} sm={6} md={4}   >
-        <BookCard uid={id} id={card.id} data={card.data} listed={true} />
-      </Grid>
-    ))}
 
-    </Grid>
-    </Container>
+    
+
+
+
+
+
+
+
+    <Box sx={{ display: "flex" }}>
+      <CssBaseline />
+      <Drawer
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          "& .MuiDrawer-paper": {
+            width: drawerWidth,
+            boxSizing: "border-box"
+          }
+        }}
+        variant="permanent"
+        anchor="left"
+      >
+        
+        <List>
+          <ListItem key="New Collection" >
+            <ListItemButton sx={{
+              borderRadius: 2,
+              background:"lightGrey",
+              fontSize: "20px",
+              padding: 2,
+            }}>
+
+              <ListItemIcon>
+                <BookmarkAddIcon/>
+              </ListItemIcon>
+              <ListItemText primary="New Collection" />
+            </ListItemButton>
+          </ListItem>
+        </List>
+        <Divider />
+        <List>
+          {["My Favorites", "Lord Of The Rings Saga", "All Marvel Comics"].map((text, index) => (
+            <ListItem key={text} disablePadding>
+              <ListItemButton
+                selected={selectedIndex === index}
+                onClick={(ev) => { handleListItemClick(ev, index)}}
+              >
+                <ListItemIcon>
+                    <BookIcon />
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      </Drawer>
+      <Box
+        component="main"
+        sx={{ flexGrow: 1, bgcolor: "background.default", p: 3 }}
+      >
+        
+        <Grid
+          container
+          direction="row"
+          justifyContent="space-between"
+          alignItems="flex-start"
+          sx={{pr:5}}
+        >
+        <div>
+        <Typography variant="h5"  color="text.primary" paragraph>
+          <BookmarkIcon/> Lord Of The Rings Ultimate Collectors Edition <Typography color="text.secondary" variant="body1">2 books</Typography>
+        </Typography>
+        </div>
+
+        <Button
+          id="fade-button"
+          aria-controls={open ? 'fade-menu' : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? 'true' : undefined}
+          
+          onClick={handleMenuOpen}
+          endIcon={<KeyboardArrowDown />}
+        >
+          Options
+        </Button>
+        <Menu
+          id="fade-menu"
+          MenuListProps={{
+            'aria-labelledby': 'fade-button',
+          }}
+          anchorEl={anchorMenu}
+          open={open}
+          onClose={handleMenuClose}
+          TransitionComponent={Fade}
+        >
+          <MenuItem onClick={handleMenuClose}>Edit name</MenuItem>
+          <MenuItem onClick={handleMenuClose}>Clear Collection</MenuItem>
+          <MenuItem sx={{color: "red"}} onClick={handleMenuClose}>Delete Collection</MenuItem>
+        </Menu>
+    
+        
+        </Grid>
+        
+        <Typography paragraph>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus
+          dolor purus non enim praesent elementum facilisis leo vel. Risus at
+          ultrices mi tempus imperdiet. Semper risus in hendrerit gravida rutrum
+          quisque non tellus. Convallis convallis tellus id interdum velit
+          laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed
+          adipiscing. Amet nisl suscipit adipiscing bibendum est ultricies
+          integer quis. Cursus euismod quis viverra nibh cras. Metus vulputate
+          eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo
+          quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat
+          vivamus at augue. At augue eget arcu dictum varius duis at consectetur
+          lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa sapien
+          faucibus et molestie ac.
+        </Typography>
+        <Typography paragraph>
+          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est
+          ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
+          elementum integer enim neque volutpat ac tincidunt. Ornare suspendisse
+          sed nisi lacus sed viverra tellus. Purus sit amet volutpat consequat
+          mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis
+          risus sed vulputate odio. Morbi tincidunt ornare massa eget egestas
+          purus viverra accumsan in. In hendrerit gravida rutrum quisque non
+          tellus orci ac. Pellentesque nec nam aliquam sem et tortor. Habitant
+          morbi tristique senectus et. Adipiscing elit duis tristique
+          sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
+          eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
+          posuere sollicitudin aliquam ultrices sagittis orci a.
+        </Typography>
+      </Box>
+    </Box>
+
 
     </ThemeProvider>
   );

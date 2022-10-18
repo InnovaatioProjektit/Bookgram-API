@@ -7,8 +7,8 @@ import { removeToken, getValidToken, getDecodedToken } from './token'
  * @param {string} pwd 
  * @returns palauttaa JWT sessioavaimen.
  */
-export async function register({username, password}){
-    return await api.post('/api/users/adduser', {username, password}).then(res => {
+export async function register({username, password, fullname, lastname}){
+    return await api.post('/api/users/adduser', {username, password, fullname, lastname}).then(res => {
         return [true, res.data]
     }).catch(res => {
         if(res.response.status == 400 || res.response.status === 401){
@@ -22,11 +22,11 @@ export async function register({username, password}){
  * @param {object} param0  käyttäjätiedot
  * @returns palauttaa kirjautumisavaimen
  */
-export async function login({username, password}){
-    return await api.post('api/users/login', {username, password}).then(res => {
+export async function login({username, password, remember}){
+    return await api.post('api/users/login', {username, password, remember}).then(res => {
         const token = res.data.token 
         setToken(token)
-
+        
         return [true, getDecodedToken()]
     }).catch(res => {
         console.log("error", res)
@@ -47,5 +47,20 @@ export async function logout(){
             return true
         }
         return false
+    })
+}
+
+/**
+ * Hae käyttäjän yleistiedot
+ * @param {string} username 
+ * @returns palauttaa array [bool, data], jossa bool on totta kun syöttö onnistuu
+ */
+ export async function findUser(userid){
+    return await api.post('/api/users/' + userid, {}).then(res => {
+        return [true, res.data]
+    }).catch(res => {
+        if(res.response.status == 400 || res.response.status === 401){
+            return [false, res.response.data.errors];
+        }
     })
 }

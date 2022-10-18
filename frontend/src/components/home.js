@@ -12,34 +12,44 @@ import Grid from '@mui/material/Grid';
 import books from "../api/books";
 import BookCard from "./bookCard";
 
-import ReactDOM from 'react-dom'
 
+import SearchBar from "./searchbar";
 import Toast from './Toast'
 
 
 function Home(props) {
   const {state} = props;
-  const [message, setMessage] = useState("")
+  const [query, setQuery] = useState("magic")
   const [volume, setVolume] = useState([])  // fill volume with book data from Google Books
 
   const { id } = state.useAuth()
 
+  /**
+   * Hae kirjoja haulla.
+   */
+  async function fetchBooks(){
+    const { data } = await books(query)
+    if(data){
+      setVolume(data.items)
+    }
+
+  }
+
+  /**
+   * Päivitä kirjahaku kun sivu latautuu kerran.
+   */
   useEffect(() => {
-    (async function fetchBooks(){
-      const { data } = await books()
-      if(data){
-        setVolume(data.items)
-      }
-    }())
+    fetchBooks()
   }, [id])
 
   const theme = createTheme();
+  let toast
 
   return (
     <ThemeProvider theme={theme}>
     <CssBaseline />
     <Container maxWidth="sm">
-            <Toast message="hello" horizontal="left" vertical="top" severity="success" />
+            <Toast message="hello" horizontal="left" vertical="bottom" severity="success" buoy={(hook) => {toast = hook}} />
             <Typography
               component="h1"
               variant="h3"
@@ -54,14 +64,17 @@ function Home(props) {
               authors, add your favorites in collections and review your latest 
               books.
             </Typography>
+            
             <Stack
               sx={{ pt: 4 }}
               direction="row"
               spacing={2}
               justifyContent="center"
             >
-              
+      
             </Stack>
+            <SearchBar request={fetchBooks} requestSearch={setQuery}></SearchBar>
+
     </Container>
     <Container sx={{ py: 8 }} maxWidth="md">
     <Grid container spacing={4}>

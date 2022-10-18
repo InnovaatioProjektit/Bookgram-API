@@ -1,5 +1,7 @@
 import { validationResult } from 'express-validator';
-import { 
+import booksAPI from '../../utils/booksAPI.js';
+import {
+   getBook, 
    createCollection, 
    removeCollection, 
    clearCollection,
@@ -11,7 +13,15 @@ import {
    getCollectionsByBook,
    getCollectionFavourited,
    updateCollectionFavourited, 
-   updateBookStarred} from './model/book.js'
+   updateBookStarred,
+   getCollectionsByBookAndUser} from './model/book.js'
+
+
+   async function asyncForEach(array, callback) {
+      for (let index = 0; index < array.length; index++) {
+        await callback(array[index], index, array);
+      }
+    }
 
 /** 
  * Hae kirjakokoelman kaikki kirjat
@@ -29,10 +39,19 @@ import {
        })
    }
 
-   if(request.params.id){
+   if(request.params.shelf){
       const success = await getBooksByCollection(request.params.shelf)
 
       if(success){
+         let i = 0
+         if(request.query.less == null){
+            await asyncForEach(success, async (e) => {
+               const dat = await booksAPI.lookup(e.booktag)
+              success[i++] = dat
+            })
+         }
+         
+
          return response.status(200).json({rows: success, message: "OK"})
       }
 
@@ -68,7 +87,7 @@ import {
  */
 export async function collectionByID(request, response){
     if(request.params.id || request.id){
-        const success = await getCollectionByID(request.params.id)
+        const success = await getCollectionByID(request.params.shelf)
         return response.status(200).json({rows: success, message: "OK"})
      }
  
@@ -76,22 +95,29 @@ export async function collectionByID(request, response){
 }
 
 /** 
- * Hae kirja tag:llä
+ * Hae kirja tag:llä tietokannasta. Liitä kirjan data GoogleMapista
  * 
  * TODO
  * 
  * @name books get
- * @route {GET} /api/books/volume/:tag
+ * @route {GET} /api/books/volume/:tag?extra
  */
  export async function volume(request, response){
     if(request.params.tag){
         const success = await getBook(request.params.tag)
 
         if(success){
+         if(request.query.more == null){
+            await asyncForEach(success, async (e) => {
+            const dat = await booksAPI.lookup(e.booktag)
+            success.volume = dat
+         })
             return response.status(200).json({rows: success, message: "OK"})
         }
+
+      }
         
-     }
+   }
  
      return response.status(401).json({message: "Invalid book tag"})
 }
@@ -146,6 +172,7 @@ export async function collectionByID(request, response){
            errors: err.array()
        })
    }
+   
 
 
    const rows = await removeBookFromCollection({
@@ -211,12 +238,12 @@ export async function collectionByID(request, response){
    }
 
    const id = await removeCollection({
-      user: request.body.user,
+      user: request.body.user || request.id,
       shelf: request.body.shelf
    })
 
    if(id != null){
-      console.log(`A user ${request.body.user} removed a collection '${request.params.shelf}'`)
+      console.log(`A user ${request.body.user} removed a collection '${request.body.shelf}'`)
       return response.status(200).json({rows: id, message:"The collection was removed"})
    }
 
@@ -271,9 +298,37 @@ export async function collectionByID(request, response){
       }
 
       const success = await getCollectionsByBook(request.params.tag);
+      
 
       if(success){
-         return response.status(200).json({rows: rows, message: "OK"})
+         return response.status(200).json({rows: success, message: "OK"})
+      }
+
+
+      return response.status(401).json({rows: {}, message: "Doesn't belong to any collections"})
+
+   }
+
+
+   /**
+   * Hae kaikki KÄYTTÄJÄN kokoelmat, jossa haettava kirja sijaitsee
+   * @name books post
+   * @route {POST} /books/collections/book/:tag
+   */
+    export async function collectionsByBookAndUser(request, response){
+      const err = validationResult(request);
+      if(!err.isEmpty()){
+         return response.status(400).json({
+            method: request.method,
+            status: response.statusCode,
+            errors: err.array()
+         })
+      }
+
+      const success = await getCollectionsByBookAndUser(request.id, request.params.tag);
+
+      if(success){
+         return response.status(200).json({rows: success, message: "OK"})
       }
 
 

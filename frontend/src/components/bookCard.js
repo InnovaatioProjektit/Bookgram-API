@@ -16,22 +16,36 @@ import {getBook, addBook, removeBook } from "../api/books";
 /**
  * Tallenna kirja tietokantaan
  */
-const btn_saveBook = (user, tag) => {
-    const {err, data} = addBook({user, tag})
+const btn_saveBook = (user, tag, shelf) => {
+    const {err, data} = addBook({user, shelf, tag})
 
     if(err){
         console.log(err)
     }
 }
 
+/**
+ * Poista kirja tietokannasta
+ */
+const btn_removeBook = (user, tag, shelf) => {
+    const {err, data} = removeBook({user, shelf, tag})
+    if(err){
+        console.log(err)
+    }else{
+
+    }
+}
+
+const action_btn = (user, tag, shelf) => {
+
+}
+
 
   /**
    * Poista kirja tietokannasta
    */
-   const btn_unsafeBook = (id, user, tag) => {
-    console.log(id, user, tag)
-
-    const {err, data} = removeBook({user, tag})
+   const btn_unsafeBook = (user, tag, shelf) => {
+    const {err, data} = removeBook({user, tag, shelf})
 
     if(err){
         console.log(err)
@@ -96,7 +110,7 @@ export default (props) => {
             </Typography>
             </CardContent>
                 <CardActions>
-                <Button size="small" onClick={() => { listed ? btn_unsafeBook(uid, data.id) : btn_saveBook(uid, data.id) }}>{listed ? "Remove" : "Add"}</Button>
+                <Button size="small" onClick={() => { listed ? btn_unsafeBook(uid, data.id, 1) : btn_saveBook(uid, data.id, 1) }}>{listed ? "Remove" : "Add"}</Button>
                 <Button size="small" onClick={() => { btn_likeBook() }}>Like</Button>
                 </CardActions>
         </Card>

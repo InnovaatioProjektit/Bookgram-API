@@ -13,7 +13,8 @@ import axios from 'axios'
     }
   };
 
-export default async () => {
+export default async (query) => {
+    options.params.q = query;
     return await axios.request(options).then(function (response) {
         return {data: response.data}
     }).catch(function (error) {
@@ -22,20 +23,35 @@ export default async () => {
     });
 }
 
+
 /**
- * Hae (konvertoi) kirjan tiedot tagilla Google Books API:sta.
- * 
- * Sivuston kirjadata rajoittuu omistajan tunnisteen ja kirjan tagiin. Tagin avulla
- * tekemällä kutsun Google Books API:in, saamme kirjan muutkin tiedot julki.
- * 
- * @param {string} tag kirjan tunnista
- * @returns palauttaa kirjan kaikki tiedot Google Books API:sta
+ * Etsi kirjoja samankaltaisella nimellä
+ * @param {string} query
+ * @returns palauttaa haetun kirjan tiedot
  */
-export async function tagToBook({ tag }){
-    return await axios.get(options.url + '/' + tag).then((response) => {
-        return {data: response.data}
-    }).catch((error) => {
-        return {err: error}
+ export async function getVolumes(query){
+    return await api.get('/api/books/volumes?q=' + query).then(res => {
+        return {data: res.data}
+    }).catch(res => {
+        if(res.response.status == 400 || res.response.status === 401){
+            return {err: res.response.data}
+        }
+    })
+}
+
+
+/**
+ * Hae kirjan syvät tiedot tagilla
+ * @param {string} query
+ * @returns palauttaa haetun kirjan tiedot
+ */
+ export async function getVolume(query){
+    return await api.get('/api/books/volume?q=' + query).then(res => {
+        return {data: res.data}
+    }).catch(res => {
+        if(res.response.status == 400 || res.response.status === 401){
+            return {err: res.response.data}
+        }
     })
 }
 
@@ -46,7 +62,7 @@ export async function tagToBook({ tag }){
  * @param {string} tag
  * @returns palauttaa haetun kirjan tiedot
  */
- export async function getBook({ tag }){
+ export async function getBook(tag){
     return await api.get('/api/books/volume/' + tag).then(res => {
         return {data: res.data}
     }).catch(res => {
@@ -117,6 +133,7 @@ export async function tagToBook({ tag }){
  * Poista kirja kokoelmasta
  * @param {string} kirjan tunniste ja käyttäjän tunniste
  * @returns palauttaa haetun kirjan tiedot
+ * TODO
  */
  export async function removeBook({ user, tag, shelf }){
     return await api.post('/api/books/collections/' + shelf +'/removeBook', {user, tag}).then(res => {
@@ -215,7 +232,22 @@ export async function tagToBook({ tag }){
  * @returns palauttaa lista kirjoja
  */
  export async function collectionsByTag(tag){
-    return await api.get('/books/collections/book/' + tag).then(res => {
+    return await api.get('/api/books/collections/book/' + tag).then(res => {
+        return {data: res.data}
+    }).catch(res => {
+        if(res.response.status == 400 || res.response.status === 401){
+            return {err: res.response.data}
+        }
+    })
+}
+
+/**
+ * Hae kaikki kokoelmat jossa kirjan tägi
+ * @param {string}  kirjan tagi
+ * @returns palauttaa lista kirjoja
+ */
+ export async function collectionsByTagAndUser({user, tag}){
+    return await api.post('/api/books/collections/book/' + tag).then(res => {
         return {data: res.data}
     }).catch(res => {
         if(res.response.status == 400 || res.response.status === 401){

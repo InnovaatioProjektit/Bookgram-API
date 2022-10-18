@@ -13,9 +13,9 @@ import pool from './../../../utils/db.js'
  */
 export async function create(userData){
 
-    const {username, password} = userData;
+    const {username, password, fullname, lastname} = userData;
 
-    return pool.query("INSERT INTO userSchema.User (username, passwd) VALUES ($1, $2) RETURNING (id)", [username, password]).then(rawData => {
+    return pool.query("INSERT INTO userSchema.User (username, passwd, fullname, lastname) VALUES ($1, $2, $3, $4) RETURNING (id)", [username, password, fullname, lastname]).then(rawData => {
         if(rawData.rowCount){
             return rawData.rows[0];
         }
@@ -28,14 +28,14 @@ export async function create(userData){
  /**
  * Hakee käyttäjän tiedot tietokannasta nimen avulla
  * 
- * @returns palauttaa yksittäisen käyttäjän tiedot (nimi, sähköposti, puhelin, käyttäjäoikeus)
+ * @returns palauttaa yksittäisen käyttäjän tiedot (nimi, sähköposti, käyttäjäoikeus)
  * @param {string} value käyttäjän nimi
  */
   export async function findUserByName(userName){
-    return pool.query("SELECT id, username FROM userSchema.User WHERE username = $1", [String(userName)]).then(rawData => {
+    return pool.query("SELECT id, username, fullname, lastname FROM userSchema.User WHERE username = $1", [String(userName)]).then(rawData => {
         
         if(rawData.rowCount){
-            return rawData.rows;
+            return rawData.rows[0];
         }
 
         return null;
@@ -46,13 +46,13 @@ export async function create(userData){
  * Palauttaa käyttäjän käyttäjätunnuksen avulla
  * 
  * @param {number} userID käyttäjätunnus
- * @returns Yksittäisen käyttäjän tiedot (nimi, sähköposti, puhelinnumero, käyttäjäoikeus)
+ * @returns Yksittäisen käyttäjän tiedot (nimi, sähköposti, käyttäjäoikeus)
  */
  export async function findUserById(userID){
-    return pool.query("SELECT id, username FROM userSchema.User WHERE id = $1", [Number(userID)]).then(rawData => {
+    return pool.query("SELECT id, username, fullname, lastname FROM userSchema.User WHERE id = $1", [Number(userID)]).then(rawData => {
         
         if(rawData.rowCount){
-            return rawData.rows;
+            return rawData.rows[0];
         }
 
         return null;

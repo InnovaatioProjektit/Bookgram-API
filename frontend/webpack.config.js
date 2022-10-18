@@ -1,5 +1,8 @@
 module.exports = {
     //...
+    watchOptions: {
+      ignored: /node_modules/
+    },
     resolve: {
       fallback: {
         assert: require.resolve('assert'),

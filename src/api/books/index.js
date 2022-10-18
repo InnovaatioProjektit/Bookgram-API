@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { body, param, validationResult } from 'express-validator';
 import { authentication } from '../../auth/pwd.js';
+import booksAPI from '../../utils/booksAPI.js';
 
 import collection, { 
   collections, 
@@ -11,11 +12,10 @@ import collection, {
   removeUserCollection, 
   clearUserCollection, 
   collectionsByBook, 
+  collectionsByBookAndUser,
   collectionLikes, 
   collectionLikesAdd,
   collectionByID} from './collection.js';
-  
-import reviews, { addreview } from './reviews.js';
 
 
 
@@ -29,12 +29,30 @@ import reviews, { addreview } from './reviews.js';
 
 const router = Router();
 
- /**
- * Hae kaikki kirja tagilla. Riippumaton kokoelmasta
- * @route {GET} /books/collections/:id
- * TODO - not finished
+
+/**
+ * Etsi kirja tunnuksella Google Api:sta
+ * @route {GET} /books/volume
  */
-router.get("/volume/:tag", authentication, volume)
+ router.get("/volume", async (request, response) => {
+  const data = await booksAPI.lookup(request.query.q)
+  return response.status(200).json(data)
+})
+
+ /**
+ * Hae kaikki kirjan tiedot tagilla. Riippumaton kokoelmasta
+ * @route {GET} /books/collections/:id
+ */
+router.get("/volume/:tag/", volume)
+
+ /**
+ * Etsi kirjoja nimellä Google Api:sta
+ * @route {GET} /books/volumes?q=""
+ */
+router.get("/volumes", async (request, response) => {
+  const data = await booksAPI.search(request.query.q)
+  return response.status(200).json(data)
+})
 
 
  /**
@@ -51,9 +69,8 @@ router.post("/collections/:shelf/addBook",
    * DELETE	/books/collections/:shelf/removeBook
    * @route {DELETE} /books/collections/:shelf/removeBook
    */
-router.delete("/collections/:shelf/removeBook",
-   param("shelf").isNumeric(),
-   body("tag").not().isEmpty().trim(), authentication, removeVolume)
+router.post("/collections/:shelf/removeBook",
+   param("shelf").isNumeric(), authentication, removeVolume)
 
 
 
@@ -73,7 +90,7 @@ router.post("/collections/createCollection",
  * @route {DELETE} /books/collections/removeCollection
  */
 router.delete("/collections/removeCollection",
-  body("shelf").isNumeric(), authentication, removeUserCollection)
+  body("shelf").isInt(), authentication, removeUserCollection)
 
 
 /**
@@ -81,7 +98,7 @@ router.delete("/collections/removeCollection",
  * @route {POST} /books/collections/clearCollection
  */
 router.post("/collections/clearCollection",
-  body("shelf").isNumeric(), authentication, clearUserCollection)
+  body("shelf").isInt(), authentication, clearUserCollection)
 
 
 /**
@@ -96,7 +113,14 @@ router.get("/collections", authentication, collections)
  * @route {GET} books/collections/book/:tag
  */
 router.get("/collections/book/:tag", 
-  param("tag").isInt(), authentication, collectionsByBook)
+  param("tag").isString(), authentication, collectionsByBook)
+
+  /**
+ * Hae kaikki käyttäjän kokoelmat, jossa haettava kirja sijaitsee
+ * @route {POST} books/collections/book/:tag
+ */
+router.post("/collections/book/:tag", 
+param("tag").isString(), authentication, collectionsByBookAndUser)
 
 /**
  * Hae kaikki käyttäjän kokoelman kirjat
@@ -134,28 +158,6 @@ router.get("/collections/:shelf/starred", param("shelf").isInt(), authentication
   console.log("TEST AND FIX ME")
   console.log(res)
 })
-
- /**
-  * Hae käyttäjä id:llä kaikki arvostelut
-  * TODO
-  */
-router.get("/reviews/:id", authentication, reviews)
-
-
-/**
- * lisää uusi arvostelu
- * TODO
- */
-router.post("/reviews/addreview",
-    body("user").isNumeric(),
-    body("book").isNumeric(),
-    body("score").isNumeric(), authentication, addreview)
-
- /**
-  * hae kirjakokoelman id:llä
-  * TODO
-  */
-router.get("/collections/:id", authentication, collection)
 
 
 export default router;
