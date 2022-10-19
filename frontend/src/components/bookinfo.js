@@ -95,7 +95,7 @@ export default (props) => {
         //hae kaikki käyttäjän kokoelmat joissa kirja on
         collectionsByTagAndUser({user: token.id, tag: bookID}).then((col) => {
             let clist = []
-            if(col.data.message == "OK"){
+            if(col.data && col.data.message == "OK"){
                 col.data.rows.map((c) => {
                     clist.push(c.cname)
                 })
@@ -150,7 +150,7 @@ export default (props) => {
                     paddingRight: 20, 
                     
                     bgcolor: '#ff54000d', 
-                    height: '45vh' 
+                    height: 'auto'
                     }}>
 
 
@@ -168,7 +168,7 @@ export default (props) => {
 
                             <Paper elevation={8} >
                             <img    style={{minHeight: 350, maxWidth: "100%"}}
-                                    src={article && article?.volumeInfo.imageLinks.small}
+                                    src={article && article?.volumeInfo.imageLinks.small || article?.volumeInfo.imageLinks.smallThumbnail}
                                     srcSet={`${bookItem.img}?w=512&fit=crop&auto=format&dpr=2 2x`}
                                     alt={bookItem.title}
                                     loading="lazy"
@@ -235,14 +235,14 @@ export default (props) => {
                             </Typography>
 
                             <Button variant="contained" sx={{ mb: 2 }}>
-                                <Link href={"#"}></Link>
+                                <Link href={article && article.volumeInfo.previewLink}></Link>
                                 Read Preview
                             </Button>
 
                             <Box sx={{ mb: 4, display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                                {article && article.volumeInfo.categories ? article.volumeInfo.categories.split(",").map((value) => (
-                                    <Chip key={value} label={value} />
-                                )): " "}
+
+                            { (article && article.volumeInfo.categories)   ?   article.volumeInfo.categories[0].split("/").map((value) => (<Chip key={value} label={value} />))   : " " }
+
                             </Box>
 
                             {selectedCollections.length === 0 ? "" : (

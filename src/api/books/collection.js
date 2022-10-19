@@ -14,7 +14,9 @@ import {
    getCollectionFavourited,
    updateCollectionFavourited, 
    updateBookStarred,
-   getCollectionsByBookAndUser} from './model/book.js'
+   getCollectionsByBookAndUser,
+   getCollectionByName,
+   updateCollection} from './model/book.js'
 
 
    async function asyncForEach(array, callback) {
@@ -27,7 +29,7 @@ import {
  * Hae kirjakokoelman kaikki kirjat
  * 
  * @name books get
- * @route {GET} /api/books/collection/:id
+ * @route {GET} /api/books/collection/:shelf
  */
  export default (async (request, response) => {
    const err = validationResult(request);
@@ -205,6 +207,11 @@ export async function collectionByID(request, response){
        })
    }
 
+   const count = await getCollectionByName(request.body.user, request.body.collectionName)
+   if(count){
+      return response.status(400).json({message: "Collection name reserved by another"})
+   }
+
    const id = await createCollection({
       user: request.body.user,
       collectionName: request.body.collectionName
@@ -228,6 +235,8 @@ export async function collectionByID(request, response){
  * @route {DELETE} /api/books/collections/removeCollection
  */
  export async function removeUserCollection(request, response){
+   console.log("shelf", request.body)
+   console.log("shelfz", request.params)
    const err = validationResult(request);
    if(!err.isEmpty()){
        return response.status(400).json({
@@ -278,6 +287,44 @@ export async function collectionByID(request, response){
    }
 
    return response.status(401).json({message: "Unable to clear the collection"})
+
+  }
+
+
+
+  
+
+ /**
+  * Päivitä käyttäjän kokoelman tietoja
+  * @name books post
+  * @route {POST} /api/books/collections/updateCollection
+  */
+  export async function updateUserCollection(request, response){
+   const err = validationResult(request);
+   if(!err.isEmpty()){
+       return response.status(400).json({
+           method: request.method,
+           status: response.statusCode,
+           errors: err.array()
+       })
+   }
+
+   const count = await getCollectionByName(request.body.user, request.body.collectionName)
+   if(count){
+      return response.status(400).json({message: "Collection name reserved by another"})
+   }
+
+   const data = await updateCollection({
+      user: request.body.user,
+      shelf: request.body.shelf,
+      collectionName: request.body.collectionName
+   })
+
+   if(data){
+      return response.status(200).json({rows: data, message: "The collection was edited"})
+   }
+
+   return response.status(401).json({message: "Unable to edit the collection"})
 
   }
 

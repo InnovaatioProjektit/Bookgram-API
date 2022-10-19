@@ -8,6 +8,8 @@ import login from './login.js'
 import logout from './logout.js'
 import register from './register.js'
 import ValidationResponse from '../../utils/ValidationResponse.js';
+import { getBooksByCollection } from '../books/model/book.js';
+import collection from '../books/collection.js';
 
 /**
  * Kayttajahallinta, kuten kirjautuminen ja rekisterointi
@@ -43,7 +45,7 @@ router.post("/login",
 router.post("/logout", authentication, logout)
 
 /**
- * Palauta käyttäjän yleistiedot, käyttäjätunnuksella
+ * Palauta käyttäjän yleistiedot, haku käyttäjätunnuksella
  * @route {POST} /api/users/:userID
  */
 router.post("/:userID", param("userID").not().isEmpty().isNumeric(), authentication, async (request, response) => {
@@ -77,4 +79,18 @@ router.post("/adduser",
     body('fullname').trim().escape().isLength({min: 2, max: 25}),
     body('lastname').trim().escape().isLength({min: 2, max: 25}), register)
 
+
+/**
+ * Hae kokoelman tunnuksen avulla kokoelma, joka kuuluu käyttäjälle
+ * ja palauta kokoelman teokset. (kokoelmat ovat käyttäjä-kokoelma-avaimesta 
+ * riippuvaisia, eli omistaja voi olla  eri vaikka nimi on sama)
+ * 
+ * @route {GET} /api/users/adduser
+ */
+router.get("/:userid/collections/:shelf/volumes", 
+param('userid').not().isEmpty(),
+param('shelf').trim().escape(), collection)
+
 export default router;
+
+

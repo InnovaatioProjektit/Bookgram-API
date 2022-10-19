@@ -16,7 +16,7 @@ import { stringify } from 'querystring';
       // The position in the collection at which to start the list of results (startIndex)
       offset: 0,
       // The maximum number of elements to return with this request (Max 40) (maxResults)
-      limit: 10,
+      limit: 20,
       // Restrict results to books or magazines (or both) (printType)
       type: 'all',
       // Order results by relevance or newest (orderBy)

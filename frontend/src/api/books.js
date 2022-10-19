@@ -148,10 +148,11 @@ export default async (query) => {
 
 /**
  * Luo uusi kokoelma käyttäjälle
- * @param {string}  käyttäjän tunniste ja kokoelman nimi
+ * @param {string}  käyttäjän id ja kokoelman nimi
  * @returns palauttaa OK kun luotu
  */
  export async function createCollection({ user, collectionName }){
+    console.log("send", collectionName)
     return await api.post('/api/books/collections/createCollection', {user, collectionName}).then(res => {
         return {data: res.data}
     }).catch(res => {
@@ -168,7 +169,7 @@ export default async (query) => {
  * @returns palauttaa OK kun poistettu
  */
  export async function removeCollection({ user, shelf }){
-    return await api.delete('/api/books/collections/removeCollection', {user, shelf}).then(res => {
+    return await api.delete('/api/books/collections/removeCollection', {data: {user, shelf}}).then(res => {
         return {data: res.data}
     }).catch(res => {
         if(res.response.status == 400 || res.response.status === 401){
@@ -185,6 +186,22 @@ export default async (query) => {
  */
  export async function clearCollection({ user, shelf }){
     return await api.post('/api/books/collections/clearCollection', {user, shelf}).then(res => {
+        return {data: res.data}
+    }).catch(res => {
+        if(res.response.status == 400 || res.response.status === 401){
+            return {err: res.response.data}
+        }
+    })
+}
+
+
+/**
+ * Päivitä käyttäjän kokoelman tietoja
+ * @param {string}  käyttäjän tunniste ja kokoelman id, kokoelman nimi
+ * @returns palauttaa OK kun päivitetty
+ */
+ export async function updateCollection({ user, shelf, collectionName }){
+    return await api.post('/api/books/collections/updateCollection', {user, shelf, collectionName}).then(res => {
         return {data: res.data}
     }).catch(res => {
         if(res.response.status == 400 || res.response.status === 401){

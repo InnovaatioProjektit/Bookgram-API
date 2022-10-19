@@ -29,8 +29,6 @@ import pool from './../../../utils/db.js'
  export async function removeCollection(data){
     const {user, shelf} = data;
 
-    console.log("dat", user, shelf)
-
     return pool.query("DELETE FROM bookSchema.Collection WHERE userID = $1 AND id = $2", [parseInt(user), parseInt(shelf)]).then(rawData => {
         return rawData.rows;
     });
@@ -46,6 +44,18 @@ import pool from './../../../utils/db.js'
 
     return pool.query("DELETE FROM bookSchema.Book WHERE collectionID = $1", [parseInt(shelf)]).then(rawData => {
         return rawData.rows;
+    });
+}
+
+/**
+ * Päivitä kokoelman tykkäykset määrällä
+ * @param {object} kokoelman tunniste, uusi nimi
+ */
+ export async function updateCollection(data){
+    const {user, shelf, collectionName} = data;
+
+    return pool.query("UPDATE bookSchema.Collection SET cname = $1 WHERE id = $2", [collectionName, parseInt(shelf)]).then(rawData => {
+        return rawData.rowCount
     });
 }
 
@@ -77,6 +87,8 @@ import pool from './../../../utils/db.js'
         return rawData.rowCount
     });
 }
+
+
 
 /**
  * hae kokoelman like-määrät
@@ -118,9 +130,9 @@ import pool from './../../../utils/db.js'
 
 
 /**
- * Hae kokoelmista kirjan tunnisteen avulla. Palauttaa kokoelmien tunnisteet joihin se kuuluu
+ * Hae kokoelmat käyttäjän tunnisteen avulla. Palauttaa niiden kokoelmien tiedot jotka kuuluvat käyttäjälle
  * 
- * @param {object} kirjan tunniste (tag)
+ * @param {object} käyttäjän tunniste
  */
  export async function getCollectionsByUser(user){
 
@@ -192,6 +204,22 @@ import pool from './../../../utils/db.js'
     return pool.query("SELECT * FROM bookSchema.Collection WHERE id = $1 and userID = $2", [parseInt(id), parseInt(userID)]).then(rawData => {
         if(rawData.rowCount){
             return rawData.rows[0];
+        }
+
+        return null;
+    });
+}
+
+
+/**
+ * Hae käyttäjän kokoelmista kokoelman tiedot nimellä, palauttaa 1 jos löytyy
+ * @param {object} käyttäjän id, kokoelman id
+ */
+ export async function getCollectionByName(user, name){
+
+    return pool.query("SELECT id FROM bookSchema.Collection WHERE userID = $1 AND cname = $2", [parseInt(user), name]).then(rawData => {
+        if(rawData.rowCount){
+            return rawData.rows[0]
         }
 
         return null;

@@ -4,6 +4,9 @@ import { useParams, useSearchParams } from "react-router-dom";
 import { stringAvatar } from "../utils/stringMods";
 
 import BookItem from "./bookItem";
+import { getBooksByUser } from "../api/books";
+import { findUser } from "../api/auth";
+import { Bookmark } from "@mui/icons-material";
 
 
 
@@ -15,27 +18,33 @@ import BookItem from "./bookItem";
  * muutokset pitää tehdä kokoelman hallintasivulla.
  */
 export default (props) => {
+    const [profile, setProfile] = useState()
     const [collection, setCollection] = useState(null);
     const { collectionID } = useParams();
 
+    // hajotetaan puristettu linkki jossa on käyttäjä data ja kokoelma id
+    const params = atob(collectionID).split("_")
+    const user = params[0]
+    const shelf = params[1]
+    const title = params[2]
+
     useEffect(() => {
-        setCollection(collectionID)
+        // hae kokoelman teokset
+        getBooksByUser(user, shelf).then(res => {
+            if(res.data){
+                setCollection(res.data)
+            }
+        })
+
+        //hae kirjautuneen yleistiedot
+        findUser(user).then((usr) => {
+            const [success, data] = usr
+            if(success){
+                setProfile(data.rows)
+            }
+        })
 
     }, [collectionID])
-
-
-    const volumes = [
-        {tag: "324234", id: 1, title: "Lord of The rings : The Two Towers", author:"J.R.R Tolkien" },
-        {tag: "324234", id: 2, title: "Lord of The rings : The Return of the King", author:"J.R.R Tolkien" },
-        {tag: "324234", id: 4, title: "A Clash Of Swords", author:"George R.R. Martin" },
-        {tag: "324234", id: 5, title: "A Song of Ice And Fire: History of Targaryens", author:"George R.R. Martin" },
-        {tag: "324234", id: 6, title: "Stardust", author:"Elephena Bastion" },
-        {tag: "324234", id: 7, title: "The Mist", author:"Andew King" },
-        {tag: "324234", id: 8, title: "Blood of The Dragon", author:"Janus Sipowski" },
-        {tag: "324234", id: 9, title: "The Ironheart: Origins", author:"Janus Sipowski" },
-        {tag: "324234", id: 10, title: "Harry Potter and The Prisoner of Azkaban", author:"J.K Rowling" }
-    
-    ];
 
 
     const theme = createTheme();
@@ -60,7 +69,6 @@ export default (props) => {
                     }}>
 
                     
-                    
                     <Divider>
                     <Stack
                         direction="row"
@@ -71,21 +79,14 @@ export default (props) => {
                             mb:4
                         }}
                     >
-                        <Typography
-                        variant="subtitle2"
-                        component="h4"
-                        color="text.secondary"
-                        gutterBottom>
-                            Authored By
-                        </Typography>
 
-                        <Avatar {...stringAvatar('Kent Dodds')} />
+                        
                         <Typography
                         variant="h6"
                         component="h4"
                         color="text.primary"
                         >
-                            Kent Dodds
+                             <span>A curated collection by </span>{profile && profile.fullname +" "+ profile.lastname}
                         </Typography>
                     </Stack>
                     </Divider>
@@ -98,7 +99,8 @@ export default (props) => {
                         color="text.primary"
                         gutterBottom
                     >
-                        Silmarillion Saaga
+                        
+                        <Bookmark/> {title}
                     </Typography>
 
 
@@ -122,7 +124,7 @@ export default (props) => {
                     <Typography variant="h5" sx={{py: 5}}>Books in this collection</Typography>
                     <Grid container spacing={5}>
 
-                        {volumes.map((card) => (
+                        {collection && collection.map((card) => (
                             <Grid item key={card.id} xs={8} md={3}>
                                 <BookItem uid={null} data={card} />
                             </Grid>

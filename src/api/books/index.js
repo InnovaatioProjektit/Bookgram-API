@@ -15,7 +15,8 @@ import collection, {
   collectionsByBookAndUser,
   collectionLikes, 
   collectionLikesAdd,
-  collectionByID} from './collection.js';
+  collectionByID,
+  updateUserCollection} from './collection.js';
 
 
 
@@ -66,7 +67,7 @@ router.post("/collections/:shelf/addBook",
 
 
   /**
-   * DELETE	/books/collections/:shelf/removeBook
+   * Poista kirja käyttäjän kokoelmasta
    * @route {DELETE} /books/collections/:shelf/removeBook
    */
 router.post("/collections/:shelf/removeBook",
@@ -99,6 +100,14 @@ router.delete("/collections/removeCollection",
  */
 router.post("/collections/clearCollection",
   body("shelf").isInt(), authentication, clearUserCollection)
+
+
+/**
+ * Muokkaa käyttäjän kokoelman tiedot
+ * @route {POST} /books/collections/updateCollection
+ */
+ router.post("/collections/updateCollection",
+ body("shelf").isInt(), authentication, updateUserCollection)
 
 
 /**
@@ -152,6 +161,7 @@ body("count").isInt({min: -1, max: 1}), param('shelf').isInt(), authentication, 
  * Hae käyttäjän kokoelman tähditetyt kirjat
  * @route {GET} /books/collections/:shelf/starred
  * FIXME
+ * @deprecated
  */
 router.get("/collections/:shelf/starred", param("shelf").isInt(), authentication, (request, response) => {
   const res = collection(request, response);

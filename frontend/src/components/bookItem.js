@@ -13,8 +13,7 @@ export default (props) => {
     const {uid, id, data} = props;
 
     const navigate = useNavigate()
-    const link = "/book/details/" + data.tag;
-
+    const link = "/book/details/" + data.id;
 
     return (
         <Card sx={{ minWidth: 230, maxWidth: "25%" }}>
@@ -24,17 +23,17 @@ export default (props) => {
             <CardMedia
             component="img"
             height="300"
-            image="https://images.unsplash.com/photo-1530731141654-5993c3016c77?w=512&fit=crop&auto=format"
-            alt="green iguana"
+            image={data.volumeInfo?.imageLinks?.small || data.volumeInfo?.imageLinks?.smallThumbnail ||  "https://images.unsplash.com/photo-1530731141654-5993c3016c77?w=512&fit=crop&auto=format"}
+            alt={data.volumeInfo.title || "green iguana"}
             />
             <CardContent sx={{
                minHeight: 114
             }}>
             <Typography  align="center" gutterBottom variant="subtitle1" component="div">
-                {data.title}
+                {data.volumeInfo.title}
             </Typography>
             <Typography align="center" variant="body2" color="text.secondary">
-                By {data.author}
+                By {data.volumeInfo.authors && data.volumeInfo.authors[0] || "No Author Data"}
             </Typography>
             </CardContent>
         </CardActionArea>
@@ -55,8 +54,6 @@ export default (props) => {
         ) : "" }
         
         </Card>
-
-
 
     );
 

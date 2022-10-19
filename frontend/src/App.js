@@ -16,16 +16,15 @@ import SharedList from './components/bookshare'
 
 
 const sections = [
-    { title: 'All Books', url: '/' },
-    { title: 'My Collections', url: '/booklist' },
-    { title: 'My Likes', url: '/reviews' }
+    { title: 'Search books', url: '/' },
+    { title: 'My collections', url: '/booklist' }
   ];
 
 
 const App = () => {
 
     let state = {
-        title: "Bookgram",
+        title: "Bookgram Club",
         token: getDecodedToken,
         useAuth: () => {
             return getDecodedToken()

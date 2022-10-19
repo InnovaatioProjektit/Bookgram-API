@@ -76,7 +76,7 @@ export default function Login(){
         >
           
           <Typography component="h1" variant="h5">
-            Log In
+            Sign In
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField

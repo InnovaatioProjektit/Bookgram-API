@@ -15,6 +15,7 @@ import BookCard from "./bookCard";
 
 import SearchBar from "./searchbar";
 import Toast from './Toast'
+import BookItem from "./bookItem";
 
 
 function Home(props) {
@@ -22,7 +23,9 @@ function Home(props) {
   const [query, setQuery] = useState("magic")
   const [volume, setVolume] = useState([])  // fill volume with book data from Google Books
 
-  const { id } = state.useAuth()
+   // user auth
+   const token = state.useAuth()
+   const loggedIn = !!token
 
   /**
    * Hae kirjoja haulla.
@@ -40,7 +43,7 @@ function Home(props) {
    */
   useEffect(() => {
     fetchBooks()
-  }, [id])
+  }, [loggedIn])
 
   const theme = createTheme();
   let toast
@@ -49,7 +52,7 @@ function Home(props) {
     <ThemeProvider theme={theme}>
     <CssBaseline />
     <Container maxWidth="sm">
-            <Toast message="hello" horizontal="left" vertical="bottom" severity="success" buoy={(hook) => {toast = hook}} />
+            <Toast message="Successful login" horizontal="left" vertical="bottom" severity="success" buoy={(hook) => {toast = hook}} />
             <Typography
               component="h1"
               variant="h3"
@@ -76,17 +79,20 @@ function Home(props) {
             <SearchBar request={fetchBooks} requestSearch={setQuery}></SearchBar>
 
     </Container>
-    <Container sx={{ py: 8 }} maxWidth="md">
-    <Grid container spacing={4}>
+    <Container sx={{ py: 8 }} maxWidth="auto">
+    <Grid container spacing={4} p={10}>
 
-    {volume.map((card) => (
-      <Grid item key={card.id} xs={12} sm={6} md={4}>
-        <BookCard uid={id} data={card} />
-      </Grid>
-    ))}
+      {volume.map((card) => (
+          <Grid item key={card.id} xs={2} md={2}>
+              <BookItem uid={null} data={card} />
+          </Grid>
+      ))}
 
     </Grid>
     </Container>
+
+
+    
 
     </ThemeProvider>
   );
