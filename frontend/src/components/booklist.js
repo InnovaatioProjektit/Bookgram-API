@@ -157,6 +157,7 @@ function BookCollection(props) {
                   setSeverity("success")
                   setMessage(data.message)
                   toast(true)
+                  setSelectedName(collectionName)
               }else{
                   setSeverity("error")
                   setMessage(res.err.message)

@@ -34,7 +34,7 @@ export default function Register(){
         }
 
         validatePasswords(credentials.password, data.get('rpassword'))
-        setUserErr(isRequired(credentials.name))
+        setUserErr(isRequired(credentials.fullname))
         setSurErr(isRequired(credentials.lastname))
 
         if(!pwdMatch || err){

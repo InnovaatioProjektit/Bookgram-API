@@ -44,6 +44,25 @@ router.post("/login",
  */
 router.post("/logout", authentication, logout)
 
+
+/**
+ * Luo uusi käyttäjätunnus. Salananan pitää olla vähintään 4 kirjaimen pituinen
+ * @route {POST} /api/users/adduser
+ */
+router.post("/adduser", 
+    body('username').not().isEmpty().trim().escape().custom(async value => {
+        const user = await findUserByName(value);
+        if (user) {
+            return Promise.reject('Käyttäjätunnus on jo olemassa.');
+        }
+    }),
+    body('password').trim().escape().isLength({min: 4, max: 128}), 
+    body('fullname').trim().escape().isLength({min: 2, max: 25}),
+    body('lastname').trim().escape().isLength({min: 2, max: 25}), register)
+
+
+
+    
 /**
  * Palauta käyttäjän yleistiedot, haku käyttäjätunnuksella
  * @route {POST} /api/users/:userID
@@ -62,22 +81,6 @@ router.post("/:userID", param("userID").not().isEmpty().isNumeric(), authenticat
     return response.status(401).json({message: "No userdata was found"})
 
 })
-
-
-/**
- * Luo uusi käyttäjätunnus. Salananan pitää olla vähintään 4 kirjaimen pituinen
- * @route {POST} /api/users/adduser
- */
-router.post("/adduser", 
-    body('username').not().isEmpty().trim().escape().custom(async value => {
-        const user = await findUserByName(value);
-        if (user) {
-            return Promise.reject('Käyttäjätunnus on jo olemassa.');
-        }
-    }),
-    body('password').trim().escape().isLength({min: 4, max: 128}), 
-    body('fullname').trim().escape().isLength({min: 2, max: 25}),
-    body('lastname').trim().escape().isLength({min: 2, max: 25}), register)
 
 
 /**

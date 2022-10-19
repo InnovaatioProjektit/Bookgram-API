@@ -8,7 +8,7 @@ import { removeToken, getValidToken, getDecodedToken } from './token'
  * @returns palauttaa JWT sessioavaimen.
  */
 export async function register({username, password, fullname, lastname}){
-    return await api.post('/api/users/adduser', {username, password, fullname, lastname}).then(res => {
+    return await api.post('api/users/adduser', {username, password, fullname, lastname}).then(res => {
         return [true, res.data]
     }).catch(res => {
         if(res.response.status == 400 || res.response.status === 401){
@@ -56,7 +56,7 @@ export async function logout(){
  * @returns palauttaa array [bool, data], jossa bool on totta kun syöttö onnistuu
  */
  export async function findUser(userid){
-    return await api.post('/api/users/' + userid, {}).then(res => {
+    return await api.post('api/users/' + userid, {}).then(res => {
         return [true, res.data]
     }).catch(res => {
         if(res.response.status == 400 || res.response.status === 401){
