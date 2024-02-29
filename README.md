@@ -13,7 +13,7 @@ The project uses React-basd MUI user interface library.
 
 ## Setup
 
-The backend uses Express.js running on Node 16 and vanilla javascript. **src** folder contains backend and **frontend** was build on React.
+The backend uses *Express.js* running on *Node 16* and vanilla javascript. **src** folder contains backend and **frontend** was build on React.
 
 Prerequisites:
 - [Node](https://nodejs.org/en/) 16.17
